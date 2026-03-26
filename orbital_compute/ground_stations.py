@@ -159,3 +159,23 @@ def find_contact_windows(satellite: Satellite, stations: List[GroundStation],
 
     windows.sort(key=lambda w: w.start)
     return windows
+
+
+if __name__ == "__main__":
+    from datetime import datetime, timezone
+    from .orbit import starlink_shell_1_sample
+    print("=" * 60)
+    print("  GROUND STATION NETWORK DEMO")
+    print("=" * 60)
+    print(f"\n  {len(DEFAULT_GROUND_STATIONS)} stations worldwide:")
+    for gs in DEFAULT_GROUND_STATIONS:
+        print(f"    {gs.name:<12} {gs.lat_deg:>6.1f}° {gs.lon_deg:>7.1f}° "
+              f"DL:{gs.downlink_mbps:.0f}Mbps")
+    sats = starlink_shell_1_sample(4)
+    t = datetime(2026, 3, 26, 12, 0, 0, tzinfo=timezone.utc)
+    windows = find_contact_windows(sats[0], DEFAULT_GROUND_STATIONS, t, 6.0)
+    print(f"\n  Contacts for {sats[0].name} (next 6h): {len(windows)} passes")
+    for w in windows[:8]:
+        print(f"    {w.station_name:<12} {w.start.strftime('%H:%M')}-{w.end.strftime('%H:%M')} "
+              f"elev:{w.max_elevation_deg}° DL:{w.downlink_mb:.0f}MB")
+    print(f"\n{'=' * 60}")
