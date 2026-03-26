@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Documentation - Orbital Compute Simulator</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="index.html" class="nav-brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#4fc3f7" stroke-width="2"><circle cx="12" cy="12" r="3"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(-30 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(30 12 12)"/></svg>
+      Orbital Compute
+    </a>
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="globe.html">3D Globe</a></li>
+      <li><a href="cost.html">Cost Calculator</a></li>
+      <li><a href="api-docs.html" class="active">API Docs</a></li>
+    </ul>
+  </nav>
+
+  <main class="container" style="max-width:900px">
+    <h1 style="font-size:1.5rem;margin-bottom:0.5rem">API Documentation</h1>
+    <p class="text-muted mb-2">REST API for the Orbital Compute Simulator. Base URL: <code style="color:var(--accent)">https://api.orbital-compute.dev/v1</code></p>
+
+    <!-- Setup -->
+    <div class="card mb-2">
+      <h2 style="font-size:1.1rem;margin-bottom:1rem">Setup</h2>
+      <div class="code-block"><span class="comment"># Install and start the API server</span>
+pip install orbital-compute-sim
+orbital-compute serve --port 8080
+
+<span class="comment"># Or use Docker</span>
+docker run -p 8080:8080 orbital-compute/sim:latest
+
+<span class="comment"># Authentication</span>
+<span class="comment"># Include your API key in the Authorization header:</span>
+curl -H <span class="string">"Authorization: Bearer YOUR_API_KEY"</span> \
+  https://api.orbital-compute.dev/v1/fleet/status</div>
+    </div>
+
+    <!-- Endpoints -->
+
+    <!-- POST /simulate -->
+    <div class="endpoint">
+      <div class="endpoint-header" onclick="this.parentElement.querySelector('.endpoint-body').classList.toggle('hidden')">
+        <span class="method method-post">POST</span>
+        <span class="endpoint-path">/simulate</span>
+        <span class="endpoint-desc">Run a constellation simulation</span>
+      </div>
+      <div class="endpoint-body">
+        <h4 class="text-sm fw-bold mb-1">Request Body</h4>
+        <div class="code-block">{
+  <span class="string">"num_satellites"</span>: <span class="number">12</span>,
+  <span class="string">"sim_hours"</span>: <span class="number">24</span>,
+  <span class="string">"num_jobs"</span>: <span class="number">100</span>,
+  <span class="string">"altitude_km"</span>: <span class="number">550</span>,
+  <span class="string">"inclination_deg"</span>: <span class="number">53</span>,
+  <span class="string">"solar_watts"</span>: <span class="number">2000</span>,
+  <span class="string">"battery_wh"</span>: <span class="number">5000</span>
+}</div>
+        <h4 class="text-sm fw-bold mb-1 mt-1">curl Example</h4>
+        <div class="code-block">curl -X POST https://api.orbital-compute.dev/v1/simulate \
+  -H <span class="string">"Content-Type: application/json"</span> \
+  -H <span class="string">"Authorization: Bearer YOUR_API_KEY"</span> \
+  -d <span class="string">'{"num_satellites": 12, "sim_hours": 24, "num_jobs": 100}'</span></div>
+        <h4 class="text-sm fw-bold mb-1 mt-1">Response <span class="badge badge-success">200</span></h4>
+        <div class="code-block">{
+  <span class="string">"simulation_id"</span>: <span class="string">"sim_a1b2c3d4"</span>,
+  <span class="string">"status"</span>: <span class="string">"completed"</span>,
+  <span class="string">"stats"</span>: {
+    <span class="string">"fleet_utilization"</span>: <span class="number">68.4</span>,
+    <span class="string">"completed_jobs"</span>: <span class="number">97</span>,
+    <span class="string">"avg_latency_sec"</span>: <span class="number">142.3</span>,
+    <span class="string">"avg_battery_pct"</span>: <span class="number">72.1</span>,
+    <span class="string">"eclipse_fraction"</span>: <span class="number">35.2</span>,
+    <span class="string">"orbital_period_min"</span>: <span class="number">95.6</span>
+  },
+  <span class="string">"satellite_count"</span>: <span class="number">12</span>,
+  <span class="string">"timesteps"</span>: <span class="number">906</span>
+}</div>
+      </div>
+    </div>
+
+    <!-- GET /fleet/status -->
+    <div class="endpoint">
+      <div class="endpoint-header" onclick="this.parentElement.querySelector('.endpoint-body').classList.toggle('hidden')">
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/fleet/status</span>
+        <span class="endpoint-desc">Get current fleet status</span>
+      </div>
+      <div class="endpoint-body">
+        <h4 class="text-sm fw-bold mb-1">curl Example</h4>
+        <div class="code-block">curl https://api.orbital-compute.dev/v1/fleet/status \
+  -H <span class="string">"Authorization: Bearer YOUR_API_KEY"</span></div>
+        <h4 class="text-sm fw-bold mb-1 mt-1">Response <span class="badge badge-success">200</span></h4>
+        <div class="code-block">{
+  <span class="string">"fleet_id"</span>: <span class="string">"fleet_001"</span>,
+  <span class="string">"satellites"</span>: [
+    {
+      <span class="string">"id"</span>: <span class="string">"SAT-001"</span>,
+      <span class="string">"status"</span>: <span class="string">"computing"</span>,
+      <span class="string">"position"</span>: { <span class="string">"lat"</span>: <span class="number">32.4</span>, <span class="string">"lon"</span>: <span class="number">-118.2</span>, <span class="string">"alt_km"</span>: <span class="number">550</span> },
+      <span class="string">"battery_pct"</span>: <span class="number">78.3</span>,
+      <span class="string">"temp_c"</span>: <span class="number">42</span>,
+      <span class="string">"in_eclipse"</span>: <span class="keyword">false</span>,
+      <span class="string">"active_jobs"</span>: <span class="number">3</span>,
+      <span class="string">"ground_contact"</span>: <span class="string">"Hawaii"</span>
+    }
+  ],
+  <span class="string">"total_active_jobs"</span>: <span class="number">24</span>,
+  <span class="string">"fleet_utilization"</span>: <span class="number">72.1</span>
+}</div>
+      </div>
+    </div>
+
+    <!-- GET /satellites/:id -->
+    <div class="endpoint">
+      <div class="endpoint-header" onclick="this.parentElement.querySelector('.endpoint-body').classList.toggle('hidden')">
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/satellites/{id}</span>
+        <span class="endpoint-desc">Get detailed satellite telemetry</span>
+      </div>
+      <div class="endpoint-body">
+        <h4 class="text-sm fw-bold mb-1">Parameters</h4>
+        <table style="margin-bottom:1rem">
+          <tr><td><code>id</code></td><td>Satellite identifier (e.g., SAT-001)</td></tr>
+          <tr><td><code>?from</code></td><td>Start time ISO 8601 (optional)</td></tr>
+          <tr><td><code>?to</code></td><td>End time ISO 8601 (optional)</td></tr>
+        </table>
+        <h4 class="text-sm fw-bold mb-1">curl Example</h4>
+        <div class="code-block">curl https://api.orbital-compute.dev/v1/satellites/SAT-001 \
+  -H <span class="string">"Authorization: Bearer YOUR_API_KEY"</span></div>
+        <h4 class="text-sm fw-bold mb-1 mt-1">Response <span class="badge badge-success">200</span></h4>
+        <div class="code-block">{
+  <span class="string">"id"</span>: <span class="string">"SAT-001"</span>,
+  <span class="string">"orbital_elements"</span>: {
+    <span class="string">"altitude_km"</span>: <span class="number">550</span>,
+    <span class="string">"inclination_deg"</span>: <span class="number">53</span>,
+    <span class="string">"raan_deg"</span>: <span class="number">0</span>
+  },
+  <span class="string">"hardware"</span>: {
+    <span class="string">"gpu_count"</span>: <span class="number">8</span>,
+    <span class="string">"gpu_type"</span>: <span class="string">"A100-space"</span>,
+    <span class="string">"solar_watts"</span>: <span class="number">2000</span>,
+    <span class="string">"battery_wh"</span>: <span class="number">5000</span>
+  },
+  <span class="string">"telemetry"</span>: {
+    <span class="string">"battery_pct"</span>: <span class="number">78.3</span>,
+    <span class="string">"temp_c"</span>: <span class="number">42</span>,
+    <span class="string">"solar_input_w"</span>: <span class="number">1850</span>,
+    <span class="string">"compute_load_w"</span>: <span class="number">800</span>
+  },
+  <span class="string">"uptime_hours"</span>: <span class="number">4320</span>,
+  <span class="string">"total_jobs_completed"</span>: <span class="number">12847</span>
+}</div>
+      </div>
+    </div>
+
+    <!-- POST /jobs -->
+    <div class="endpoint">
+      <div class="endpoint-header" onclick="this.parentElement.querySelector('.endpoint-body').classList.toggle('hidden')">
+        <span class="method method-post">POST</span>
+        <span class="endpoint-path">/jobs</span>
+        <span class="endpoint-desc">Submit a compute job</span>
+      </div>
+      <div class="endpoint-body">
+        <h4 class="text-sm fw-bold mb-1">Request Body</h4>
+        <div class="code-block">{
+  <span class="string">"name"</span>: <span class="string">"training-run-042"</span>,
+  <span class="string">"gpu_count"</span>: <span class="number">4</span>,
+  <span class="string">"estimated_duration_sec"</span>: <span class="number">3600</span>,
+  <span class="string">"priority"</span>: <span class="string">"high"</span>,
+  <span class="string">"container_image"</span>: <span class="string">"registry.orbital-compute.dev/pytorch:2.1"</span>,
+  <span class="string">"data_input_gb"</span>: <span class="number">2.5</span>
+}</div>
+        <h4 class="text-sm fw-bold mb-1 mt-1">curl Example</h4>
+        <div class="code-block">curl -X POST https://api.orbital-compute.dev/v1/jobs \
+  -H <span class="string">"Content-Type: application/json"</span> \
+  -H <span class="string">"Authorization: Bearer YOUR_API_KEY"</span> \
+  -d <span class="string">'{"name":"training-run-042","gpu_count":4,"estimated_duration_sec":3600,"priority":"high"}'</span></div>
+        <h4 class="text-sm fw-bold mb-1 mt-1">Response <span class="badge badge-success">201</span></h4>
+        <div class="code-block">{
+  <span class="string">"job_id"</span>: <span class="string">"job_x7y8z9"</span>,
+  <span class="string">"status"</span>: <span class="string">"queued"</span>,
+  <span class="string">"assigned_satellite"</span>: <span class="string">"SAT-003"</span>,
+  <span class="string">"estimated_start"</span>: <span class="string">"2025-01-15T14:22:00Z"</span>,
+  <span class="string">"queue_position"</span>: <span class="number">2</span>
+}</div>
+      </div>
+    </div>
+
+    <!-- GET /jobs/:id -->
+    <div class="endpoint">
+      <div class="endpoint-header" onclick="this.parentElement.querySelector('.endpoint-body').classList.toggle('hidden')">
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/jobs/{id}</span>
+        <span class="endpoint-desc">Get job status and results</span>
+      </div>
+      <div class="endpoint-body">
+        <h4 class="text-sm fw-bold mb-1">curl Example</h4>
+        <div class="code-block">curl https://api.orbital-compute.dev/v1/jobs/job_x7y8z9 \
+  -H <span class="string">"Authorization: Bearer YOUR_API_KEY"</span></div>
+        <h4 class="text-sm fw-bold mb-1 mt-1">Response <span class="badge badge-success">200</span></h4>
+        <div class="code-block">{
+  <span class="string">"job_id"</span>: <span class="string">"job_x7y8z9"</span>,
+  <span class="string">"name"</span>: <span class="string">"training-run-042"</span>,
+  <span class="string">"status"</span>: <span class="string">"completed"</span>,
+  <span class="string">"assigned_satellite"</span>: <span class="string">"SAT-003"</span>,
+  <span class="string">"started_at"</span>: <span class="string">"2025-01-15T14:22:00Z"</span>,
+  <span class="string">"completed_at"</span>: <span class="string">"2025-01-15T15:18:42Z"</span>,
+  <span class="string">"gpu_hours_used"</span>: <span class="number">3.78</span>,
+  <span class="string">"cost_usd"</span>: <span class="number">11.34</span>,
+  <span class="string">"output_url"</span>: <span class="string">"s3://orbital-results/job_x7y8z9/output.tar.gz"</span>
+}</div>
+      </div>
+    </div>
+
+    <!-- POST /cost/estimate -->
+    <div class="endpoint">
+      <div class="endpoint-header" onclick="this.parentElement.querySelector('.endpoint-body').classList.toggle('hidden')">
+        <span class="method method-post">POST</span>
+        <span class="endpoint-path">/cost/estimate</span>
+        <span class="endpoint-desc">Estimate constellation costs</span>
+      </div>
+      <div class="endpoint-body">
+        <h4 class="text-sm fw-bold mb-1">Request Body</h4>
+        <div class="code-block">{
+  <span class="string">"num_satellites"</span>: <span class="number">12</span>,
+  <span class="string">"gpus_per_sat"</span>: <span class="number">8</span>,
+  <span class="string">"solar_watts"</span>: <span class="number">2000</span>,
+  <span class="string">"launch_vehicle"</span>: <span class="string">"falcon9-rideshare"</span>,
+  <span class="string">"target_utilization"</span>: <span class="number">60</span>
+}</div>
+        <h4 class="text-sm fw-bold mb-1 mt-1">curl Example</h4>
+        <div class="code-block">curl -X POST https://api.orbital-compute.dev/v1/cost/estimate \
+  -H <span class="string">"Content-Type: application/json"</span> \
+  -H <span class="string">"Authorization: Bearer YOUR_API_KEY"</span> \
+  -d <span class="string">'{"num_satellites":12,"gpus_per_sat":8,"launch_vehicle":"falcon9-rideshare"}'</span></div>
+        <h4 class="text-sm fw-bold mb-1 mt-1">Response <span class="badge badge-success">200</span></h4>
+        <div class="code-block">{
+  <span class="string">"capex_total"</span>: <span class="number">14200000</span>,
+  <span class="string">"annual_opex"</span>: <span class="number">1650000</span>,
+  <span class="string">"cost_per_gpu_hour"</span>: <span class="number">2.84</span>,
+  <span class="string">"break_even_months"</span>: <span class="number">38</span>,
+  <span class="string">"total_gpus"</span>: <span class="number">96</span>,
+  <span class="string">"comparison"</span>: {
+    <span class="string">"vs_aws_p4d"</span>: <span class="string">"-31% cheaper"</span>,
+    <span class="string">"vs_colo_a100"</span>: <span class="string">"+89% more expensive"</span>
+  }
+}</div>
+      </div>
+    </div>
+
+    <!-- GET /ground-stations -->
+    <div class="endpoint">
+      <div class="endpoint-header" onclick="this.parentElement.querySelector('.endpoint-body').classList.toggle('hidden')">
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/ground-stations</span>
+        <span class="endpoint-desc">List ground station network</span>
+      </div>
+      <div class="endpoint-body">
+        <h4 class="text-sm fw-bold mb-1">curl Example</h4>
+        <div class="code-block">curl https://api.orbital-compute.dev/v1/ground-stations \
+  -H <span class="string">"Authorization: Bearer YOUR_API_KEY"</span></div>
+        <h4 class="text-sm fw-bold mb-1 mt-1">Response <span class="badge badge-success">200</span></h4>
+        <div class="code-block">{
+  <span class="string">"stations"</span>: [
+    {
+      <span class="string">"name"</span>: <span class="string">"Svalbard"</span>,
+      <span class="string">"lat"</span>: <span class="number">78.2</span>,
+      <span class="string">"lon"</span>: <span class="number">15.6</span>,
+      <span class="string">"antennas"</span>: <span class="number">2</span>,
+      <span class="string">"max_bandwidth_gbps"</span>: <span class="number">10</span>,
+      <span class="string">"status"</span>: <span class="string">"operational"</span>
+    },
+    {
+      <span class="string">"name"</span>: <span class="string">"McMurdo"</span>,
+      <span class="string">"lat"</span>: <span class="number">-77.8</span>,
+      <span class="string">"lon"</span>: <span class="number">166.7</span>,
+      <span class="string">"antennas"</span>: <span class="number">1</span>,
+      <span class="string">"max_bandwidth_gbps"</span>: <span class="number">5</span>,
+      <span class="string">"status"</span>: <span class="string">"operational"</span>
+    }
+  ]
+}</div>
+      </div>
+    </div>
+
+    <!-- Error Codes -->
+    <div class="card mt-2">
+      <h2 style="font-size:1.1rem;margin-bottom:1rem">Error Codes</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Code</th><th>Meaning</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="badge badge-warning">400</span></td><td>Bad Request</td><td>Invalid parameters or missing required fields</td></tr>
+            <tr><td><span class="badge badge-danger">401</span></td><td>Unauthorized</td><td>Missing or invalid API key</td></tr>
+            <tr><td><span class="badge badge-danger">403</span></td><td>Forbidden</td><td>Insufficient permissions for this resource</td></tr>
+            <tr><td><span class="badge badge-warning">404</span></td><td>Not Found</td><td>Resource does not exist</td></tr>
+            <tr><td><span class="badge badge-danger">429</span></td><td>Rate Limited</td><td>Too many requests. Retry after indicated delay</td></tr>
+            <tr><td><span class="badge badge-danger">500</span></td><td>Internal Error</td><td>Server error. Contact support if persistent</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Rate Limits -->
+    <div class="card mt-2">
+      <h2 style="font-size:1.1rem;margin-bottom:0.75rem">Rate Limits</h2>
+      <p class="text-muted text-sm">All endpoints are rate-limited per API key:</p>
+      <ul style="list-style:none;margin-top:0.75rem">
+        <li class="text-sm" style="padding:0.3rem 0"><span class="badge badge-info">GET</span> endpoints: 100 requests/minute</li>
+        <li class="text-sm" style="padding:0.3rem 0"><span class="badge badge-info">POST /simulate</span>: 10 requests/minute</li>
+        <li class="text-sm" style="padding:0.3rem 0"><span class="badge badge-info">POST /jobs</span>: 30 requests/minute</li>
+      </ul>
+    </div>
+  </main>
+
+  <footer class="footer">
+    Orbital Compute Simulator &mdash; API Documentation
+  </footer>
+
+  <style>
+    .hidden { display: none !important; }
+  </style>
+</body>
+</html>
