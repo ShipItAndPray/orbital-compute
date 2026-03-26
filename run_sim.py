@@ -59,6 +59,13 @@ def main():
         duration = (end - start).total_seconds() / 60
         print(f"    Eclipse {i+1}: {start.strftime('%H:%M:%S')} → {end.strftime('%H:%M:%S')} ({duration:.1f} min)")
 
+    # Ground station contacts
+    total_contacts = sum(len(n.contact_windows) for n in sim.nodes)
+    total_contact_min = sum(
+        cw.duration_seconds / 60 for n in sim.nodes for cw in n.contact_windows
+    )
+    print(f"\n  Ground Station Contacts: {total_contacts} passes, {total_contact_min:.0f} min total")
+
     # Thermal analysis
     print(f"\n  Thermal Summary:")
     from orbital_compute.thermal import ThermalModel, ThermalConfig
