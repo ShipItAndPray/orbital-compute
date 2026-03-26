@@ -3,7 +3,7 @@
 **The open-source toolkit for designing, simulating, and operating satellite compute constellations.**
 
 [![Tests](https://github.com/ShipItAndPray/orbital-compute/actions/workflows/test.yml/badge.svg)](https://github.com/ShipItAndPray/orbital-compute/actions)
-[![200+ Tests](https://img.shields.io/badge/tests-200%2B%20passing-brightgreen)](https://github.com/ShipItAndPray/orbital-compute/actions)
+[![210+ Tests](https://img.shields.io/badge/tests-210%2B%20passing-brightgreen)](https://github.com/ShipItAndPray/orbital-compute/actions)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![21K+ Lines](https://img.shields.io/badge/code-21K%2B%20lines-informational)](https://github.com/ShipItAndPray/orbital-compute)
@@ -36,7 +36,7 @@ object_detection             1042 GB        5 GB    99.5%      0 GB
 
 ## What It Does
 
-### 23 Python Modules
+### 26 Python Modules
 
 | Category | Modules | What It Models |
 |----------|---------|----------------|
@@ -165,7 +165,7 @@ Temperature range:  -19°C to 24°C (within limits)
 ## Architecture
 
 ```
-orbital_compute/          # 23 Python modules
+orbital_compute/          # 26 Python modules
 ├── orbit.py              # SGP4 propagation, eclipse detection
 ├── power.py              # Solar + battery model
 ├── thermal.py            # Stefan-Boltzmann radiative cooling
