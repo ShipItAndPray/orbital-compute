@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import sys, os; sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 """Tutorial: Earth Observation Constellation Design
 
 Use case: A startup wants to build a constellation for real-time
