@@ -1,0 +1,21 @@
+{
+  "config": {
+    "constellation": "Starcloud",
+    "n_satellites": 12,
+    "sim_hours": 12.0,
+    "n_jobs": 80,
+    "solar_watts": 1500,
+    "battery_wh": 4000,
+    "radiation_strategy": "CHECKPOINT_RESTART"
+  },
+  "results": {
+    "jobs_completed": 80,
+    "jobs_total": 80,
+    "fleet_utilization_pct": 11.1,
+    "compute_hours": 14.6,
+    "preemptions": 0,
+    "seu_events": 303,
+    "seu_recovered": 303,
+    "seu_failed": 0
+  }
+}

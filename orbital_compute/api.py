@@ -22,9 +22,25 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 from typing import Optional
 from urllib.parse import urlparse, parse_qs
 
+import numpy as np
+
 from .scheduler import ComputeJob, JobStatus, JobType
 from .simulator import Simulation, SimulationConfig, SatelliteNode
 from .workloads import WORKLOAD_CATALOG, create_job, WorkloadGenerator
+
+
+class _NumpySafeEncoder(json.JSONEncoder):
+    """Handle numpy types that may leak into telemetry dicts."""
+    def default(self, obj):
+        if isinstance(obj, (np.bool_,)):
+            return bool(obj)
+        if isinstance(obj, (np.integer,)):
+            return int(obj)
+        if isinstance(obj, (np.floating,)):
+            return float(obj)
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()
+        return super().default(obj)
 
 
 class SimulationServer:
@@ -71,11 +87,23 @@ class SimulationServer:
             last_thermal = node.thermal_history[-1] if node.thermal_history else {}
             running_job = self.sim.scheduler.running_jobs.get(node.name)
 
+            # Get current orbital position for altitude
+            try:
+                pos = node.satellite.position_at(self.sim.current_time)
+                alt_km = round(pos.altitude_km, 1)
+                lat = round(pos.lat_deg, 2)
+                lon = round(pos.lon_deg, 2)
+            except Exception:
+                alt_km = 0.0
+                lat = 0.0
+                lon = 0.0
+
             result.append({
                 "name": node.name,
                 "orbit": {
-                    "altitude_km": node.satellite.altitude_km,
-                    "inclination_deg": node.satellite.inclination_deg,
+                    "altitude_km": alt_km,
+                    "lat_deg": lat,
+                    "lon_deg": lon,
                 },
                 "power": {
                     "battery_pct": last_power.get("battery_pct", 0),
@@ -142,9 +170,9 @@ class SimulationServer:
             windows = []
             for w in node.contact_windows:
                 windows.append({
-                    "ground_station": w.ground_station,
-                    "start": w.start_time.isoformat(),
-                    "end": w.end_time.isoformat(),
+                    "ground_station": w.station_name,
+                    "start": w.start.isoformat(),
+                    "end": w.end.isoformat(),
                     "duration_s": round(w.duration_seconds, 1),
                     "max_elevation_deg": round(w.max_elevation_deg, 1),
                 })
@@ -220,8 +248,8 @@ class SimulationServer:
                 # Quieter logging
                 pass
 
-            def _send_json(self, data: dict, status: int = 200):
-                body = json.dumps(data, indent=2).encode("utf-8")
+            def _send_json(self, data, status: int = 200):
+                body = json.dumps(data, indent=2, cls=_NumpySafeEncoder).encode("utf-8")
                 self.send_response(status)
                 self.send_header("Content-Type", "application/json")
                 self.send_header("Content-Length", str(len(body)))
@@ -376,6 +404,9 @@ def _self_test():
             with urllib.request.urlopen(req, timeout=5) as resp:
                 data = json.loads(resp.read().decode())
                 return resp.status, data
+        except urllib.error.HTTPError as e:
+            data = json.loads(e.read().decode())
+            return e.code, data
         except Exception as e:
             return None, str(e)
 
