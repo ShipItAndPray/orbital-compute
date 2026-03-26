@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Globe - Orbital Compute Simulator</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="index.html" class="nav-brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#4fc3f7" stroke-width="2"><circle cx="12" cy="12" r="3"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(-30 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(30 12 12)"/></svg>
+      Orbital Compute
+    </a>
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="globe.html" class="active">3D Globe</a></li>
+      <li><a href="cost.html">Cost Calculator</a></li>
+      <li><a href="api-docs.html">API Docs</a></li>
+    </ul>
+  </nav>
+
+  <div id="globe-container">
+    <!-- Three.js canvas will be inserted here -->
+
+    <div class="globe-overlay">
+      <div class="card" style="padding:1rem;min-width:200px">
+        <div class="control-group" style="margin-bottom:0.75rem">
+          <label>Satellites: <span id="globe-sat-label">12</span></label>
+          <input type="range" id="globe-sat-count" min="2" max="24" value="12">
+        </div>
+        <div class="control-group">
+          <label>Speed: <span id="speed-label">1.0x</span></label>
+          <input type="range" id="speed-slider" min="0.1" max="10" value="1" step="0.1">
+        </div>
+      </div>
+    </div>
+
+    <div class="globe-info" id="sat-info">
+      <div class="text-muted text-sm">Click a satellite for details</div>
+      <div class="text-sm mt-1"><span class="text-muted">Satellites:</span> 12</div>
+      <div class="text-sm"><span class="text-muted">Altitude:</span> 550 km</div>
+      <div class="text-sm"><span class="text-muted">Inclination:</span> 53 deg</div>
+    </div>
+
+    <div class="time-controls">
+      <button id="play-btn">Pause</button>
+      <span id="time-display" class="text-accent fw-bold">T+0.0h</span>
+      <button id="reset-btn">Reset</button>
+    </div>
+  </div>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module">
+    import { init } from './js/globe.js';
+    init();
+  </script>
+</body>
+</html>

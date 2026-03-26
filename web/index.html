@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orbital Compute Simulator</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="index.html" class="nav-brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#4fc3f7" stroke-width="2"><circle cx="12" cy="12" r="3"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(-30 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(30 12 12)"/></svg>
+      Orbital Compute
+    </a>
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="globe.html">3D Globe</a></li>
+      <li><a href="cost.html">Cost Calculator</a></li>
+      <li><a href="api-docs.html">API Docs</a></li>
+    </ul>
+  </nav>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Orbital Compute Simulator</h1>
+      <p class="tagline">High-fidelity simulation of GPU compute constellations in low Earth orbit. Model power, thermal, scheduling, and inter-satellite links.</p>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+        <a href="dashboard.html" class="btn btn-primary btn-lg">Launch Dashboard</a>
+        <a href="globe.html" class="btn btn-secondary btn-lg">3D Visualization</a>
+      </div>
+    </section>
+
+    <section class="stats-row">
+      <div class="stat-item">
+        <div class="stat-value">16</div>
+        <div class="stat-label">Modules</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">10K+</div>
+        <div class="stat-label">Lines of Code</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">44</div>
+        <div class="stat-label">Tests Passing</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">6</div>
+        <div class="stat-label">Subsystems</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Explore the Simulator</h2>
+      <p class="section-subtitle">Interactive tools for designing and analyzing orbital compute constellations.</p>
+      <div class="card-grid">
+        <a href="dashboard.html" class="card" style="text-decoration:none">
+          <div class="card-icon">&#128752;</div>
+          <h3>Interactive Dashboard</h3>
+          <p>Configure constellation parameters and run simulations. View fleet statistics, per-satellite data, and timeline visualizations.</p>
+        </a>
+        <a href="globe.html" class="card" style="text-decoration:none">
+          <div class="card-icon">&#127760;</div>
+          <h3>3D Globe View</h3>
+          <p>Three.js visualization with satellite orbits, ground stations, inter-satellite links, and real-time animation controls.</p>
+        </a>
+        <a href="cost.html" class="card" style="text-decoration:none">
+          <div class="card-icon">&#128176;</div>
+          <h3>Cost Analysis</h3>
+          <p>Interactive cost calculator comparing orbital compute to cloud providers. CAPEX/OPEX breakdown and sensitivity analysis.</p>
+        </a>
+        <a href="api-docs.html" class="card" style="text-decoration:none">
+          <div class="card-icon">&#128421;</div>
+          <h3>API Documentation</h3>
+          <p>REST API endpoints for programmatic access to simulation, scheduling, fleet status, and cost modeling.</p>
+        </a>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">What It Models</h2>
+      <p class="section-subtitle">End-to-end simulation of a space-based compute constellation.</p>
+      <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr))">
+        <div class="card">
+          <h3 style="color:var(--accent)">Orbital Mechanics</h3>
+          <p>Circular orbit propagation with configurable altitude and inclination. Computes period, ground track, eclipse transitions, and satellite-to-satellite visibility.</p>
+        </div>
+        <div class="card">
+          <h3 style="color:var(--accent)">Power System</h3>
+          <p>Solar panel generation during sunlit arcs, battery charge/discharge modeling during eclipse. Tracks state-of-charge and compute availability.</p>
+        </div>
+        <div class="card">
+          <h3 style="color:var(--accent)">Thermal Management</h3>
+          <p>Steady-state thermal model accounting for solar input, Earth IR, internal heat generation from GPUs, and radiator performance.</p>
+        </div>
+        <div class="card">
+          <h3 style="color:var(--accent)">Job Scheduling</h3>
+          <p>Greedy and priority-based schedulers that assign compute jobs across the constellation, respecting power constraints and satellite availability windows.</p>
+        </div>
+        <div class="card">
+          <h3 style="color:var(--accent)">Inter-Satellite Links</h3>
+          <p>Optical ISL modeling between satellites. Computes link budgets, data routing, and latency for distributed compute across the constellation.</p>
+        </div>
+        <div class="card">
+          <h3 style="color:var(--accent)">Radiation Environment</h3>
+          <p>South Atlantic Anomaly and Van Allen belt exposure modeling. Predicts single-event upsets and cumulative dose for GPU lifetime estimation.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Quick Start</h2>
+      <div class="card" style="max-width:700px;margin:0 auto">
+        <div class="code-block"><span class="comment"># Clone the repository</span>
+git clone https://github.com/user/orbital-compute-sim.git
+cd orbital-compute-sim
+
+<span class="comment"># Install dependencies</span>
+pip install -r requirements.txt
+
+<span class="comment"># Run the simulation</span>
+python -m orbital_compute.main --satellites 12 --hours 24
+
+<span class="comment"># Run tests</span>
+pytest tests/ -v
+
+<span class="comment"># Start the web dashboard</span>
+cd web && python -m http.server 3001</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    Orbital Compute Simulator &mdash; Modeling the future of space-based computing.
+  </footer>
+</body>
+</html>

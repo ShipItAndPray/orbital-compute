@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cost Calculator - Orbital Compute Simulator</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="index.html" class="nav-brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#4fc3f7" stroke-width="2"><circle cx="12" cy="12" r="3"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(-30 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(30 12 12)"/></svg>
+      Orbital Compute
+    </a>
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="globe.html">3D Globe</a></li>
+      <li><a href="cost.html" class="active">Cost Calculator</a></li>
+      <li><a href="api-docs.html">API Docs</a></li>
+    </ul>
+  </nav>
+
+  <main class="container-wide">
+    <h1 style="font-size:1.5rem;margin-bottom:1.5rem">Cost Calculator</h1>
+
+    <!-- Controls -->
+    <div class="controls-panel">
+      <div class="controls-grid">
+        <div class="control-group">
+          <label>Satellites <span class="control-value">12</span></label>
+          <input type="range" id="cost-sats" min="1" max="50" value="12">
+        </div>
+        <div class="control-group">
+          <label>GPUs per Sat <span class="control-value">8</span></label>
+          <input type="range" id="cost-gpus" min="1" max="16" value="8">
+        </div>
+        <div class="control-group">
+          <label>Solar Watts <span class="control-value">2000</span></label>
+          <input type="range" id="cost-solar" min="500" max="5000" value="2000" step="100">
+        </div>
+        <div class="control-group">
+          <label>Launch Vehicle</label>
+          <select id="cost-vehicle">
+            <option value="falcon9-rideshare">Falcon 9 Rideshare</option>
+            <option value="falcon9-dedicated">Falcon 9 Dedicated</option>
+            <option value="electron">Rocket Lab Electron</option>
+            <option value="starship">SpaceX Starship</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label>Utilization % <span class="control-value">60</span></label>
+          <input type="range" id="cost-util" min="10" max="100" value="60" step="5">
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="card-grid" style="grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); margin-bottom:1.5rem">
+      <div class="card text-center">
+        <div class="text-muted text-sm">Total CAPEX</div>
+        <div id="cost-capex" class="stat-value" style="font-size:1.3rem">--</div>
+      </div>
+      <div class="card text-center">
+        <div class="text-muted text-sm">Annual OPEX</div>
+        <div id="cost-opex" class="stat-value" style="font-size:1.3rem">--</div>
+      </div>
+      <div class="card text-center">
+        <div class="text-muted text-sm">Cost/GPU-Hour</div>
+        <div id="cost-gpu-hour" class="stat-value" style="font-size:1.3rem">--</div>
+      </div>
+      <div class="card text-center">
+        <div class="text-muted text-sm">Break-Even</div>
+        <div id="cost-breakeven" class="stat-value" style="font-size:1.3rem">--</div>
+      </div>
+      <div class="card text-center">
+        <div class="text-muted text-sm">Total GPUs</div>
+        <div id="cost-total-gpus" class="stat-value" style="font-size:1.3rem">--</div>
+      </div>
+      <div class="card text-center">
+        <div class="text-muted text-sm">Launches</div>
+        <div id="cost-launches" class="stat-value" style="font-size:1.3rem">--</div>
+      </div>
+      <div class="card text-center">
+        <div class="text-muted text-sm">Per-Sat Cost</div>
+        <div id="cost-sat-cost" class="stat-value" style="font-size:1.3rem">--</div>
+      </div>
+      <div class="card text-center">
+        <div class="text-muted text-sm">Sat Mass</div>
+        <div id="cost-sat-mass" class="stat-value" style="font-size:1.3rem">--</div>
+      </div>
+    </div>
+
+    <!-- Charts -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem">
+      <div class="chart-container">
+        <div class="chart-title">Cost per GPU-Hour Comparison</div>
+        <canvas id="chart-comparison" style="height:280px"></canvas>
+      </div>
+      <div class="chart-container">
+        <div class="chart-title">CAPEX Breakdown</div>
+        <canvas id="chart-capex" style="height:280px"></canvas>
+      </div>
+    </div>
+
+    <!-- CAPEX Breakdown Table -->
+    <h2 style="font-size:1.2rem;margin:1.5rem 0 1rem">CAPEX Breakdown</h2>
+    <div class="table-wrap mb-2">
+      <table>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Cost</th>
+            <th>% of Total</th>
+          </tr>
+        </thead>
+        <tbody id="capex-breakdown-body">
+          <tr><td colspan="3" class="text-muted text-center">Calculating...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Sensitivity Analysis -->
+    <h2 style="font-size:1.2rem;margin:1.5rem 0 1rem">Sensitivity Analysis</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Utilization</th>
+            <th>Cost/GPU-Hour</th>
+            <th>Break-Even</th>
+            <th>Viability</th>
+          </tr>
+        </thead>
+        <tbody id="sensitivity-body">
+          <tr><td colspan="4" class="text-muted text-center">Calculating...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <footer class="footer">
+    Orbital Compute Simulator &mdash; Cost Calculator
+  </footer>
+
+  <script type="module" src="js/cost.js"></script>
+</body>
+</html>
