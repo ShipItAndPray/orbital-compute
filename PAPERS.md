@@ -6,7 +6,7 @@ Papers surveyed for algorithms to implement in orbital-compute. Prioritized by i
 
 | # | Paper | Year | Key Algorithm | Module | Status |
 |---|-------|------|---------------|--------|--------|
-| 1 | [Phoenix: Sunlight-Aware Scheduling](https://arxiv.org/abs/2407.07337) | INFOCOM 2024 | SBEO optimization + two-level decomposition | `phoenix.py` | Building |
+| 1 | [Phoenix: Sunlight-Aware Scheduling](https://arxiv.org/abs/2407.07337) | INFOCOM 2024 | SBEO optimization + two-level decomposition | `phoenix.py` | **DONE** |
 | 2 | [Battery Aging Model](https://arxiv.org/html/2603.04372v1) | arXiv 2026 | Physics-driven degradation (C-rate, temp, cycle depth) | `power.py` | Not started |
 | 3 | [RATA: Resource-Aware Task Allocator](https://arxiv.org/abs/2601.06706) | arXiv 2026 | Constellation-wide allocation with blocking analysis | `scheduler_v2.py` | Not started |
 | 4 | [RedNet: App-Aware Radiation Tolerance](https://arxiv.org/abs/2407.11853) | arXiv 2024 | DNN layer rearrangement + error-tolerant activations | `radiation.py` | Not started |
@@ -38,7 +38,8 @@ Papers surveyed for algorithms to implement in orbital-compute. Prioritized by i
 
 | Capability | Based On | Module |
 |-----------|----------|--------|
-| Eclipse-aware scheduling | Phoenix (simplified) | `scheduler_v2.py` |
+| **PHOENIX SBEO scheduling** | **INFOCOM 2024 (full implementation)** | **`phoenix.py`** |
+| Eclipse-aware look-ahead | Phoenix (simplified) | `scheduler_v2.py` |
 | Contact Graph Routing | NASA DTN/CGR standard | `cgr.py` |
 | Federated learning (FedAvg/FedProx/SCAFFOLD) | Multiple FL papers | `federated.py` |
 | SEU fault injection + SAA | Radiation environment models | `radiation.py` |
