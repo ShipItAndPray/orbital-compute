@@ -217,6 +217,38 @@ class TestPower(unittest.TestCase):
 
 
 # ===================================================================
+# Battery aging tests (arXiv:2603.04372)
+# ===================================================================
+class TestBatteryAging(unittest.TestCase):
+    def test_soh_degrades_with_cycling(self):
+        from orbital_compute.power import BatteryAgingModel
+        b = BatteryAgingModel(initial_capacity_wh=5000)
+        for _ in range(100):
+            b.cycle(dod_pct=50, c_rate=1.0, temp_c=30)
+        self.assertLess(b.soh_pct, 100)
+
+    def test_higher_dod_degrades_faster(self):
+        from orbital_compute.power import BatteryAgingModel
+        b1 = BatteryAgingModel(initial_capacity_wh=5000)
+        b2 = BatteryAgingModel(initial_capacity_wh=5000)
+        for _ in range(500):
+            b1.cycle(dod_pct=20)
+            b2.cycle(dod_pct=80)
+        self.assertGreater(b1.soh_pct, b2.soh_pct)
+
+    def test_calendar_aging(self):
+        from orbital_compute.power import BatteryAgingModel
+        b = BatteryAgingModel(initial_capacity_wh=5000)
+        b.calendar_age(8760)
+        self.assertAlmostEqual(b.capacity_fade_pct, 2.0, delta=0.1)
+
+    def test_eol_prediction_positive(self):
+        from orbital_compute.power import BatteryAgingModel
+        b = BatteryAgingModel(initial_capacity_wh=5000)
+        self.assertGreater(b.predict_eol(15, 30), 0)
+
+
+# ===================================================================
 # thermal.py tests
 # ===================================================================
 class TestThermal(unittest.TestCase):
