@@ -9,7 +9,7 @@ Papers surveyed for algorithms to implement in orbital-compute. Prioritized by i
 | 1 | [Phoenix: Sunlight-Aware Scheduling](https://arxiv.org/abs/2407.07337) | INFOCOM 2024 | SBEO optimization + two-level decomposition | `phoenix.py` | **DONE** |
 | 2 | [Battery Aging Model](https://arxiv.org/html/2603.04372v1) | arXiv 2026 | Physics-driven degradation (C-rate, temp, cycle depth) | `power.py` | **DONE** |
 | 3 | [RATA: Resource-Aware Task Allocator](https://arxiv.org/abs/2601.06706) | arXiv 2026 | Constellation-wide allocation with blocking analysis | `scheduler_v2.py` | Not started |
-| 4 | [RedNet: App-Aware Radiation Tolerance](https://arxiv.org/abs/2407.11853) | arXiv 2024 | DNN layer rearrangement + error-tolerant activations | `radiation.py` | Not started |
+| 4 | [RedNet: App-Aware Radiation Tolerance](https://arxiv.org/abs/2407.11853) | arXiv 2024 | DNN layer rearrangement + error-tolerant activations | `radiation.py` | **DONE** |
 | 5 | [Multi-Port ISL Communication](https://arxiv.org/abs/2601.01031) | ASPLOS 2026 | Concurrent multi-link data dissemination | `isl.py` | Not started |
 
 ## MEDIUM Priority — Enhance Existing
@@ -45,4 +45,6 @@ Papers surveyed for algorithms to implement in orbital-compute. Prioritized by i
 | SEU fault injection + SAA | Radiation environment models | `radiation.py` |
 | CCSDS/ECSS standards | Space industry standards | `formats.py`, `standards.py` |
 | Kessler syndrome model | NASA ORDEM (simplified) | `debris.py` |
+| Battery aging (physics-driven) | arXiv:2603.04372 (2026) | `power.py` BatteryAgingModel |
+| RedNet app-aware radiation | arXiv:2407.11853 (2024) | `radiation.py` RedNetConfig |
 | Stefan-Boltzmann thermal | Spacecraft thermal textbooks | `thermal.py` |
