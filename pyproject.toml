@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "orbital-compute"
+version = "0.2.0"
+description = "Simulate and schedule compute jobs across satellite constellations"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.9"
+keywords = ["satellite", "orbital", "compute", "scheduling", "space", "datacenter", "simulation", "LEO"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Astronomy",
+    "Topic :: System :: Distributed Computing",
+]
+dependencies = [
+    "sgp4>=2.22",
+    "numpy>=1.24",
+]
+
+[project.urls]
+Homepage = "https://github.com/ShipItAndPray/orbital-compute"
+Documentation = "https://shipitandpray.github.io/orbital-compute/"
+Repository = "https://github.com/ShipItAndPray/orbital-compute"
+Issues = "https://github.com/ShipItAndPray/orbital-compute/issues"
+
+[project.scripts]
+orbital-sim = "run_sim:main"
+orbital-dashboard = "dashboard:main"
