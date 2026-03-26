@@ -104,3 +104,22 @@ class ThermalModel:
         q_solar = c.solar_absorptivity * 1361.0 * c.radiator_area_m2 * 0.25
         q_earth = c.earth_ir_w_m2 * c.radiator_area_m2 * 0.5
         return max(0.0, q_rad - q_solar - q_earth)
+
+
+if __name__ == "__main__":
+    print("=" * 60)
+    print("  THERMAL SUBSYSTEM DEMO")
+    print("=" * 60)
+    tm = ThermalModel(ThermalConfig(radiator_area_m2=4.0), initial_temp_c=20.0)
+    print(f"\n  Radiator: {tm.config.radiator_area_m2} m², Start: 20°C")
+    print(f"  Max sustainable heat: {tm.max_sustainable_heat_w(70):.0f}W at 70°C")
+    print(f"\n  Simulating sunlit orbit with 500W GPU heat...")
+    for minute in range(95):
+        eclipse = minute >= 60
+        s = tm.step(60, 500 if not eclipse else 100, eclipse)
+        if minute % 10 == 0:
+            phase = "ECLIPSE" if eclipse else "SUNLIT"
+            print(f"  t={minute:3d}min {phase:7s} temp={s.temp_c:5.1f}°C "
+                  f"heat={s.heat_generated_w:.0f}W rad={s.heat_radiated_w:.0f}W "
+                  f"throttle={s.throttle_pct:.0%}")
+    print(f"\n{'=' * 60}")

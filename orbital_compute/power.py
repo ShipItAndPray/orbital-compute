@@ -195,3 +195,35 @@ class BatteryAgingModel:
 
         cycles_to_eol = remaining_fade / fade_per_cycle
         return cycles_to_eol / cycles_per_day
+
+
+if __name__ == "__main__":
+    print("=" * 60)
+    print("  POWER SUBSYSTEM DEMO")
+    print("=" * 60)
+
+    # Simulate 3 orbits
+    pm = PowerModel(PowerConfig(solar_panel_watts=2000, battery_capacity_wh=5000))
+    print(f"\n  Solar: {pm.config.solar_panel_watts}W, Battery: {pm.config.battery_capacity_wh}Wh")
+    print(f"\n  Simulating 3 LEO orbits (95 min each)...")
+    for orbit in range(3):
+        # Sunlit phase (60 min)
+        for _ in range(60):
+            s = pm.step(60, in_eclipse=False, compute_load_w=500)
+        sun_batt = s.battery_pct
+        # Eclipse phase (35 min)
+        for _ in range(35):
+            s = pm.step(60, in_eclipse=True, compute_load_w=500)
+        ecl_batt = s.battery_pct
+        print(f"  Orbit {orbit+1}: sunlit→{sun_batt:.0%} eclipse→{ecl_batt:.0%} "
+              f"solar={s.solar_output_w:.0f}W load={s.load_w:.0f}W")
+
+    # Battery aging
+    print(f"\n  Battery Aging (5 years, 15 cycles/day, 30% DoD):")
+    ba = BatteryAgingModel(initial_capacity_wh=5000)
+    for year in range(1, 6):
+        for _ in range(365 * 15):
+            ba.cycle(dod_pct=30, c_rate=0.5, temp_c=28)
+        ba.calendar_age(8760)
+        print(f"  Year {year}: SoH={ba.soh_pct:.1f}% capacity={ba.capacity_wh:.0f}Wh")
+    print(f"\n{'=' * 60}")
