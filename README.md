@@ -1,20 +1,27 @@
 # Orbital Compute Simulator
 
-**The open-source toolkit for designing, simulating, and operating satellite compute constellations.**
+**The honest, open-source answer to "should we put GPUs in orbit?"**
 
 [![Tests](https://github.com/ShipItAndPray/orbital-compute/actions/workflows/test.yml/badge.svg)](https://github.com/ShipItAndPray/orbital-compute/actions)
-[![215+ Tests](https://img.shields.io/badge/tests-215%2B%20passing-brightgreen)](https://github.com/ShipItAndPray/orbital-compute/actions)
+[![222+ Tests](https://img.shields.io/badge/tests-222%2B%20passing-brightgreen)](https://github.com/ShipItAndPray/orbital-compute/actions)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![23K+ Lines](https://img.shields.io/badge/code-23K%2B%20lines-informational)](https://github.com/ShipItAndPray/orbital-compute)
+[![24K+ Lines](https://img.shields.io/badge/code-24K%2B%20lines-informational)](https://github.com/ShipItAndPray/orbital-compute)
 
 **[Live Demo](https://shipitandpray.github.io/orbital-compute/)** | **[3D Globe](https://shipitandpray.github.io/orbital-compute/globe.html)** | **[Cost Calculator](https://shipitandpray.github.io/orbital-compute/cost.html)** | **[Constellation Designer](https://shipitandpray.github.io/orbital-compute/designer.html)** | **[Data Pipeline](https://shipitandpray.github.io/orbital-compute/pipeline.html)**
 
 ---
 
-Companies like [Starcloud](https://www.ycombinator.com/companies/starcloud), [Axiom Space](https://www.axiomspace.com/orbital-data-center), and [OrbitsEdge](https://orbitsedge.com/) are putting GPUs in orbit. This simulator models the complete space datacenter stack — from orbital mechanics to job scheduling to business economics.
+Everyone in orbital compute is selling a dream. **We sell the math.**
 
-No space hardware needed. No domain expertise required.
+- Orbital compute is **24-50x more expensive** than AWS. We publish the numbers.
+- In-orbit processing saves **99% of downlink bandwidth**. We prove it with simulation.
+- Battery capacity fades to **66% in 3 years** of LEO cycling. We model the physics.
+- The PHOENIX algorithm improves worst-case battery by **23 percentage points**. We implemented the paper.
+
+This is the only open-source tool that models the **complete space datacenter stack** — from orbital mechanics to job scheduling to business economics — and tells you the truth about what works and what doesn't.
+
+No hype. No hand-waving. No "trust us." Run the simulation yourself.
 
 ```bash
 pip install -r requirements.txt
