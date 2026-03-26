@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Constellation Designer - Orbital Compute Simulator</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    .designer-layout {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+    @media (max-width: 960px) {
+      .designer-layout { grid-template-columns: 1fr; }
+    }
+    .input-panel .control-group { margin-bottom: 1rem; }
+    .input-panel .control-group:last-child { margin-bottom: 0; }
+    .input-panel label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .results-section { margin-bottom: 1.5rem; }
+    .results-section h3 {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+      margin-bottom: 0.75rem;
+      font-weight: 600;
+    }
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 0.75rem;
+    }
+    .metric-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.75rem 1rem;
+    }
+    .metric-label {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.25rem;
+    }
+    .metric-value {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent);
+      font-family: var(--font-mono);
+    }
+    .metric-value.warn { color: var(--warning); }
+    .metric-value.danger { color: var(--danger); }
+    .metric-value.success { color: var(--success); }
+    .walker-notation {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      color: var(--accent);
+      background: rgba(79, 195, 247, 0.08);
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius);
+      display: inline-block;
+      margin-top: 0.5rem;
+    }
+    .coverage-bar-container {
+      margin-bottom: 0.5rem;
+    }
+    .coverage-bar-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.2rem;
+    }
+    .coverage-bar-track {
+      height: 8px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .coverage-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: var(--accent);
+      transition: width 0.3s;
+    }
+    .design-rank {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+    .design-rank .rank-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+    .rank-1 { background: rgba(79, 195, 247, 0.2); color: var(--accent); }
+    .rank-2 { background: rgba(255, 167, 38, 0.15); color: var(--warning); }
+    .rank-3 { background: rgba(139, 148, 158, 0.15); color: var(--text-secondary); }
+    .design-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      margin-bottom: 1rem;
+      transition: all 0.2s;
+    }
+    .design-card:hover {
+      border-color: rgba(79, 195, 247, 0.3);
+    }
+    .design-card.best {
+      border-color: rgba(79, 195, 247, 0.4);
+      box-shadow: 0 0 20px rgba(79, 195, 247, 0.08);
+    }
+    .design-card .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+    .design-card .mini-metric {
+      font-size: 0.8rem;
+    }
+    .design-card .mini-metric span {
+      color: var(--text-secondary);
+    }
+    .design-card .mini-metric strong {
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+    }
+    .no-design {
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-muted);
+    }
+    .cost-breakdown-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+    @media (max-width: 600px) {
+      .cost-breakdown-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="index.html" class="nav-brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#4fc3f7" stroke-width="2"><circle cx="12" cy="12" r="3"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(-30 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(30 12 12)"/></svg>
+      Orbital Compute
+    </a>
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="globe.html">3D Globe</a></li>
+      <li><a href="cost.html">Cost Calculator</a></li>
+      <li><a href="api-docs.html">API Docs</a></li>
+      <li><a href="designer.html" class="active">Designer</a></li>
+    </ul>
+  </nav>
+
+  <main class="container-wide">
+    <h1 style="font-size:1.5rem;margin-bottom:0.25rem">Constellation Designer</h1>
+    <p style="color:var(--text-muted);margin-bottom:1.5rem">Specify your compute requirements and let the auto-design algorithm find the optimal constellation.</p>
+
+    <div class="designer-layout">
+      <!-- Left: Input Panel -->
+      <div class="input-panel">
+        <div class="controls-panel">
+          <h3 style="font-size:0.85rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-secondary);margin-bottom:1rem;font-weight:600">Requirements</h3>
+
+          <div class="control-group">
+            <label>Compute Needed <span class="control-value" id="val-compute">1000 GPU-h/day</span></label>
+            <input type="range" id="ctrl-compute" min="100" max="10000" value="1000" step="100">
+          </div>
+
+          <div class="control-group">
+            <label>Coverage Type</label>
+            <select id="ctrl-coverage">
+              <option value="global">Global (all latitudes)</option>
+              <option value="tropical">Tropical (+-30&deg;)</option>
+              <option value="polar">Polar (>60&deg;)</option>
+            </select>
+          </div>
+
+          <div class="control-group">
+            <label>Budget <span class="control-value" id="val-budget">$100M</span></label>
+            <input type="range" id="ctrl-budget" min="10" max="500" value="100" step="10">
+          </div>
+
+          <div class="control-group">
+            <label>Max Eclipse Fraction <span class="control-value" id="val-eclipse">35%</span></label>
+            <input type="range" id="ctrl-eclipse" min="10" max="50" value="35">
+          </div>
+
+          <div class="control-group">
+            <label>Data Volume <span class="control-value" id="val-data">10 TB/day</span></label>
+            <input type="range" id="ctrl-data" min="1" max="1000" value="100" step="1">
+          </div>
+
+          <div class="control-group">
+            <label>Radiation Tolerance</label>
+            <select id="ctrl-radiation">
+              <option value="commercial">Commercial</option>
+              <option value="rad_tolerant" selected>Rad-Tolerant</option>
+              <option value="rad_hard">Rad-Hard</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Results Panel -->
+      <div id="results-panel">
+        <div id="design-status" class="no-design">Calculating...</div>
+        <div id="design-results" style="display:none">
+
+          <!-- Best Design Summary -->
+          <div class="results-section">
+            <h3>Optimal Design</h3>
+            <div class="metric-grid" id="best-metrics"></div>
+            <div id="walker-display"></div>
+          </div>
+
+          <!-- Per-Satellite Sizing -->
+          <div class="results-section">
+            <h3>Per-Satellite Sizing</h3>
+            <div class="metric-grid" id="sat-metrics"></div>
+          </div>
+
+          <!-- Cost Breakdown -->
+          <div class="results-section">
+            <h3>Cost Breakdown</h3>
+            <div class="cost-breakdown-grid" id="cost-metrics"></div>
+          </div>
+
+          <!-- Coverage Map -->
+          <div class="results-section">
+            <h3>Latitude Coverage</h3>
+            <div id="coverage-map"></div>
+          </div>
+
+          <!-- Top 3 Designs Comparison -->
+          <div class="results-section">
+            <h3>Top 3 Designs</h3>
+            <div id="top-designs"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    Orbital Compute Simulator &mdash; Constellation Designer
+  </footer>
+
+  <script>
+  (function() {
+    // === Constants ===
+    const R_EARTH = 6371;        // km
+    const MU = 398600.4418;      // km^3/s^2
+    const STEFAN_BOLTZMANN = 5.67e-8;
+    const GPU_POWER_W = 300;     // watts per GPU
+    const HOUSEKEEPING_W = 150;  // avionics, comms, ADCS
+    const GPU_COMPUTE_H = 24;    // 1 GPU running 24h = 24 GPU-hours/day
+    const SOLAR_EFFICIENCY = 0.30;
+    const SOLAR_FLUX = 1361;     // W/m^2
+    const SOLAR_MASS_PER_M2 = 3; // kg/m^2
+    const BATTERY_ENERGY_DENSITY = 200; // Wh/kg
+    const RADIATOR_MASS_PER_M2 = 5;    // kg/m^2
+    const RADIATOR_EMISSIVITY = 0.85;
+    const RADIATOR_TEMP_K = 330;        // operating temp
+    const STRUCTURE_FRACTION = 0.15;    // 15% of payload mass
+
+    // Cost factors
+    const COST_PER_KG_LAUNCH = 3000;   // $/kg (Falcon 9 class)
+    const RAD_COST_MULT = { commercial: 1.0, rad_tolerant: 1.5, rad_hard: 3.0 };
+    const GPU_COST = 15000;             // $ per space-qualified GPU equivalent
+
+    // Coverage: inclination map
+    const COVERAGE_INCLINATIONS = {
+      global: 87,    // near-polar SSO
+      tropical: 28,  // low inclination
+      polar: 97      // SSO
+    };
+
+    // === DOM refs ===
+    const ctrlCompute   = document.getElementById('ctrl-compute');
+    const ctrlCoverage  = document.getElementById('ctrl-coverage');
+    const ctrlBudget    = document.getElementById('ctrl-budget');
+    const ctrlEclipse   = document.getElementById('ctrl-eclipse');
+    const ctrlData      = document.getElementById('ctrl-data');
+    const ctrlRadiation = document.getElementById('ctrl-radiation');
+
+    const valCompute = document.getElementById('val-compute');
+    const valBudget  = document.getElementById('val-budget');
+    const valEclipse = document.getElementById('val-eclipse');
+    const valData    = document.getElementById('val-data');
+
+    // === Orbital mechanics ===
+    function orbitalPeriod(alt_km) {
+      const a = R_EARTH + alt_km;
+      return 2 * Math.PI * Math.sqrt(Math.pow(a, 3) / MU); // seconds
+    }
+
+    function eclipseFraction(alt_km) {
+      const a = R_EARTH + alt_km;
+      const rho = Math.asin(R_EARTH / a);
+      return rho / Math.PI; // fraction of orbit in shadow
+    }
+
+    // === Coverage model ===
+    function coverageBands(alt_km, incl_deg, n_sats, n_planes) {
+      // Simple geometric coverage model
+      const a = R_EARTH + alt_km;
+      // Half-angle of coverage cone
+      const eta = Math.acos(R_EARTH / a);
+      const coverage_lat_width = eta * (180 / Math.PI); // degrees of lat covered per pass
+      const sats_per_plane = Math.max(1, Math.round(n_sats / n_planes));
+
+      const bands = [];
+      for (let lat = -90; lat <= 80; lat += 10) {
+        const latRad = Math.abs(lat) * Math.PI / 180;
+        const inclRad = incl_deg * Math.PI / 180;
+        let cov = 0;
+
+        if (Math.abs(lat) <= incl_deg + coverage_lat_width) {
+          // Overlap factor from multiple planes and sats
+          const plane_spread = 180 / n_planes;
+          const revisit_factor = Math.min(1, (n_planes * coverage_lat_width * 2) / 360);
+          // Higher coverage near inclination latitude
+          const lat_factor = 1 - 0.5 * Math.abs(Math.abs(lat) - incl_deg) / (coverage_lat_width + 10);
+          cov = Math.min(100, Math.max(0, revisit_factor * lat_factor * sats_per_plane * 25));
+          cov = Math.min(100, Math.round(cov));
+        }
+        bands.push({ lat_from: lat, lat_to: lat + 10, coverage: cov });
+      }
+      return bands;
+    }
+
+    // === Design algorithm ===
+    function designConstellation(params) {
+      const { compute_gpu_h, coverage_type, budget_M, max_eclipse_frac, data_tb_day, radiation } = params;
+      const inclination = COVERAGE_INCLINATIONS[coverage_type];
+      const budget_dollars = budget_M * 1e6;
+      const rad_mult = RAD_COST_MULT[radiation];
+
+      const candidates = [];
+      const altitudes = [];
+      for (let alt = 400; alt <= 2000; alt += 200) {
+        altitudes.push(alt);
+      }
+
+      for (const alt of altitudes) {
+        const period_s = orbitalPeriod(alt);
+        const period_min = period_s / 60;
+        const ecl_frac = eclipseFraction(alt);
+
+        // Check eclipse constraint
+        if (ecl_frac > max_eclipse_frac / 100) continue;
+
+        const sun_frac = 1 - ecl_frac;
+
+        // Try different numbers of satellites
+        for (let n_sats = 4; n_sats <= 200; n_sats += 2) {
+          // How many GPUs per satellite to meet total compute?
+          const effective_hours_per_gpu = GPU_COMPUTE_H * sun_frac; // only compute in sunlight (simplified)
+          const total_gpu_h_per_sat = effective_hours_per_gpu;
+          const gpus_needed_total = Math.ceil(compute_gpu_h / total_gpu_h_per_sat);
+          const gpus_per_sat = Math.max(1, Math.ceil(gpus_needed_total / n_sats));
+
+          // Power budget
+          const gpu_power = gpus_per_sat * GPU_POWER_W;
+          const total_power = gpu_power + HOUSEKEEPING_W;
+
+          // Solar panel sizing (must generate enough in sunlight to power + charge battery)
+          const eclipse_energy_wh = total_power * (ecl_frac * period_s / 3600);
+          const sun_duration_h = sun_frac * period_s / 3600;
+          const charge_power = eclipse_energy_wh / sun_duration_h; // power to recharge battery during sunlight
+          const total_solar_power = total_power + charge_power;
+          const solar_area_m2 = total_solar_power / (SOLAR_FLUX * SOLAR_EFFICIENCY);
+          const solar_watts = total_solar_power;
+
+          // Battery sizing (survive eclipse)
+          const battery_wh = eclipse_energy_wh * 1.2; // 20% margin
+          const battery_mass = battery_wh / BATTERY_ENERGY_DENSITY;
+
+          // Radiator sizing (reject GPU heat + housekeeping)
+          const heat_to_reject = total_power; // W
+          const radiator_power_per_m2 = STEFAN_BOLTZMANN * RADIATOR_EMISSIVITY * Math.pow(RADIATOR_TEMP_K, 4);
+          const radiator_area_m2 = heat_to_reject / radiator_power_per_m2;
+          const radiator_mass = radiator_area_m2 * RADIATOR_MASS_PER_M2;
+
+          // Mass budget
+          const solar_mass = solar_area_m2 * SOLAR_MASS_PER_M2;
+          const gpu_mass = gpus_per_sat * 5; // ~5 kg per GPU module
+          const payload_mass = gpu_mass + solar_mass + battery_mass + radiator_mass;
+          const structure_mass = payload_mass * STRUCTURE_FRACTION;
+          const sat_mass = payload_mass + structure_mass;
+
+          // Cost
+          const hw_per_sat = (gpus_per_sat * GPU_COST * rad_mult) +
+                             (solar_area_m2 * 500) +
+                             (battery_wh * 0.5) +
+                             (radiator_area_m2 * 2000) +
+                             50000; // bus, avionics, comms
+          const launch_per_sat = sat_mass * COST_PER_KG_LAUNCH;
+          const cost_per_sat = hw_per_sat + launch_per_sat;
+          const fleet_cost = cost_per_sat * n_sats;
+
+          if (fleet_cost > budget_dollars) continue;
+          if (sat_mass > 5000) continue; // unreasonably large
+
+          // Determine planes (Walker delta pattern)
+          let n_planes;
+          if (n_sats <= 6) n_planes = 2;
+          else if (n_sats <= 18) n_planes = Math.min(6, Math.ceil(n_sats / 3));
+          else n_planes = Math.min(12, Math.ceil(n_sats / 4));
+
+          const actual_compute = n_sats * gpus_per_sat * effective_hours_per_gpu;
+
+          candidates.push({
+            altitude: alt,
+            n_sats,
+            n_planes,
+            inclination,
+            period_min: Math.round(period_min * 10) / 10,
+            eclipse_frac: Math.round(ecl_frac * 1000) / 10,
+            gpus_per_sat,
+            total_gpus: n_sats * gpus_per_sat,
+            solar_watts: Math.round(solar_watts),
+            solar_area_m2: Math.round(solar_area_m2 * 100) / 100,
+            battery_wh: Math.round(battery_wh),
+            radiator_area_m2: Math.round(radiator_area_m2 * 100) / 100,
+            sat_mass: Math.round(sat_mass),
+            hw_per_sat: Math.round(hw_per_sat),
+            launch_per_sat: Math.round(launch_per_sat),
+            cost_per_sat: Math.round(cost_per_sat),
+            fleet_cost: Math.round(fleet_cost),
+            fleet_cost_M: Math.round(fleet_cost / 1e6 * 10) / 10,
+            actual_compute: Math.round(actual_compute),
+            coverage: coverageBands(alt, inclination, n_sats, n_planes)
+          });
+        }
+      }
+
+      // Sort by fleet cost (cheapest first)
+      candidates.sort((a, b) => a.fleet_cost - b.fleet_cost);
+
+      // Return top 3
+      return candidates.slice(0, 3);
+    }
+
+    // === Rendering ===
+    function formatDollars(n) {
+      if (n >= 1e9) return '$' + (n / 1e9).toFixed(1) + 'B';
+      if (n >= 1e6) return '$' + (n / 1e6).toFixed(1) + 'M';
+      if (n >= 1e3) return '$' + (n / 1e3).toFixed(0) + 'K';
+      return '$' + n;
+    }
+
+    function renderResults(designs) {
+      const statusEl = document.getElementById('design-status');
+      const resultsEl = document.getElementById('design-results');
+
+      if (designs.length === 0) {
+        statusEl.style.display = 'block';
+        statusEl.innerHTML = '<div style="color:var(--danger);font-weight:600">No feasible design found</div><p class="text-muted text-sm" style="margin-top:0.5rem">Try increasing budget, relaxing eclipse constraint, or reducing compute requirements.</p>';
+        resultsEl.style.display = 'none';
+        return;
+      }
+
+      statusEl.style.display = 'none';
+      resultsEl.style.display = 'block';
+
+      const best = designs[0];
+
+      // Best Design Metrics
+      document.getElementById('best-metrics').innerHTML = [
+        { label: 'Satellites', value: best.n_sats },
+        { label: 'Planes', value: best.n_planes },
+        { label: 'Altitude', value: best.altitude + ' km' },
+        { label: 'Inclination', value: best.inclination + '&deg;' },
+        { label: 'Period', value: best.period_min + ' min' },
+        { label: 'Eclipse', value: best.eclipse_frac + '%' },
+        { label: 'Total GPUs', value: best.total_gpus },
+        { label: 'Compute', value: best.actual_compute.toLocaleString() + ' GPU-h/d' },
+      ].map(m => `<div class="metric-card"><div class="metric-label">${m.label}</div><div class="metric-value">${m.value}</div></div>`).join('');
+
+      // Walker notation: i:T/P/F
+      const F = 1; // phase factor
+      document.getElementById('walker-display').innerHTML =
+        `<div class="walker-notation">Walker ${best.inclination}&deg;: ${best.n_sats}/${best.n_planes}/${F}</div>`;
+
+      // Per-Satellite Sizing
+      document.getElementById('sat-metrics').innerHTML = [
+        { label: 'GPUs/Sat', value: best.gpus_per_sat },
+        { label: 'Solar Power', value: best.solar_watts + ' W' },
+        { label: 'Solar Area', value: best.solar_area_m2 + ' m&sup2;' },
+        { label: 'Battery', value: best.battery_wh + ' Wh' },
+        { label: 'Radiator', value: best.radiator_area_m2 + ' m&sup2;' },
+        { label: 'Sat Mass', value: best.sat_mass + ' kg' },
+      ].map(m => `<div class="metric-card"><div class="metric-label">${m.label}</div><div class="metric-value">${m.value}</div></div>`).join('');
+
+      // Cost Breakdown
+      document.getElementById('cost-metrics').innerHTML = [
+        { label: 'Hardware/Sat', value: formatDollars(best.hw_per_sat) },
+        { label: 'Launch/Sat', value: formatDollars(best.launch_per_sat) },
+        { label: 'Cost/Sat', value: formatDollars(best.cost_per_sat) },
+        { label: 'Fleet Total', value: formatDollars(best.fleet_cost), cls: best.fleet_cost > best.fleet_cost * 0.9 ? '' : 'success' },
+      ].map(m => `<div class="metric-card"><div class="metric-label">${m.label}</div><div class="metric-value ${m.cls || ''}">${m.value}</div></div>`).join('');
+
+      // Coverage Map
+      const coverageHtml = best.coverage.map(b => {
+        const color = b.coverage >= 80 ? 'var(--success)' :
+                      b.coverage >= 40 ? 'var(--warning)' :
+                      b.coverage > 0  ? 'var(--danger)' : 'var(--border)';
+        return `<div class="coverage-bar-container">
+          <div class="coverage-bar-label">
+            <span>${b.lat_from}&deg; to ${b.lat_to}&deg;</span>
+            <span>${b.coverage}%</span>
+          </div>
+          <div class="coverage-bar-track">
+            <div class="coverage-bar-fill" style="width:${b.coverage}%;background:${color}"></div>
+          </div>
+        </div>`;
+      }).join('');
+      document.getElementById('coverage-map').innerHTML = coverageHtml;
+
+      // Top 3 Designs
+      const rankClasses = ['rank-1', 'rank-2', 'rank-3'];
+      const topHtml = designs.map((d, i) => {
+        return `<div class="design-card ${i === 0 ? 'best' : ''}">
+          <div class="design-rank">
+            <div class="rank-num ${rankClasses[i]}">${i + 1}</div>
+            <strong>${d.altitude} km &middot; ${d.n_sats} sats &middot; ${d.n_planes} planes</strong>
+            <span class="badge badge-info" style="margin-left:auto">${formatDollars(d.fleet_cost)}</span>
+          </div>
+          <div class="mini-grid">
+            <div class="mini-metric"><span>GPUs/sat: </span><strong>${d.gpus_per_sat}</strong></div>
+            <div class="mini-metric"><span>Total GPUs: </span><strong>${d.total_gpus}</strong></div>
+            <div class="mini-metric"><span>Compute: </span><strong>${d.actual_compute.toLocaleString()}</strong></div>
+            <div class="mini-metric"><span>Mass/sat: </span><strong>${d.sat_mass} kg</strong></div>
+            <div class="mini-metric"><span>Solar: </span><strong>${d.solar_watts} W</strong></div>
+            <div class="mini-metric"><span>Battery: </span><strong>${d.battery_wh} Wh</strong></div>
+            <div class="mini-metric"><span>Eclipse: </span><strong>${d.eclipse_frac}%</strong></div>
+            <div class="mini-metric"><span>Period: </span><strong>${d.period_min} min</strong></div>
+          </div>
+        </div>`;
+      }).join('');
+      document.getElementById('top-designs').innerHTML = topHtml;
+    }
+
+    // === Update Loop ===
+    function update() {
+      const params = {
+        compute_gpu_h: parseInt(ctrlCompute.value),
+        coverage_type: ctrlCoverage.value,
+        budget_M: parseInt(ctrlBudget.value),
+        max_eclipse_frac: parseInt(ctrlEclipse.value),
+        data_tb_day: parseFloat(ctrlData.value) / 10,
+        radiation: ctrlRadiation.value,
+      };
+
+      // Update display values
+      valCompute.textContent = parseInt(ctrlCompute.value).toLocaleString() + ' GPU-h/day';
+      valBudget.textContent = '$' + parseInt(ctrlBudget.value) + 'M';
+      valEclipse.textContent = ctrlEclipse.value + '%';
+      valData.textContent = (parseFloat(ctrlData.value) / 10).toFixed(1) + ' TB/day';
+
+      const designs = designConstellation(params);
+      renderResults(designs);
+    }
+
+    // === Bind events ===
+    [ctrlCompute, ctrlCoverage, ctrlBudget, ctrlEclipse, ctrlData, ctrlRadiation].forEach(el => {
+      el.addEventListener('input', update);
+    });
+
+    // Initial run
+    update();
+  })();
+  </script>
+</body>
+</html>
