@@ -118,3 +118,80 @@ class PowerModel:
         drain_wh = abs(net) * duration_hours / self.config.discharge_efficiency
         min_wh = self.config.min_battery_pct * self.config.battery_capacity_wh
         return self.battery_wh - drain_wh >= min_wh
+
+
+@dataclass
+class BatteryAgingModel:
+    """Physics-driven battery degradation model.
+
+    Based on arXiv:2603.04372 "Unseen Cost of Space Computing" (2026).
+    Models capacity fade from cycle depth, C-rate, and temperature.
+    """
+    initial_capacity_wh: float = 5000.0
+    cycle_count: int = 0
+    cumulative_dod: float = 0.0          # Sum of depth-of-discharge per cycle
+    capacity_wh: float = 5000.0
+    # Degradation parameters (Li-ion, space-grade)
+    calendar_fade_pct_per_year: float = 2.0   # Calendar aging
+    cycle_fade_pct_per_cycle: float = 0.005   # Per full equivalent cycle
+    temp_acceleration_factor: float = 1.0     # 1.0 at 25°C, 2x per 10°C above
+    high_c_rate_penalty: float = 1.5          # Extra degradation at high discharge rates
+
+    def cycle(self, dod_pct: float, c_rate: float = 0.5, temp_c: float = 25.0):
+        """Record one charge/discharge cycle and update capacity.
+
+        Args:
+            dod_pct: Depth of discharge (0-100%)
+            c_rate: Discharge rate (C), e.g., 0.5C, 1C, 2C
+            temp_c: Battery temperature during cycle
+        """
+        self.cycle_count += 1
+        self.cumulative_dod += dod_pct / 100.0
+
+        # Temperature acceleration (Arrhenius-like)
+        temp_factor = 2.0 ** ((temp_c - 25.0) / 10.0) if temp_c > 25 else 1.0
+
+        # C-rate penalty (high discharge = faster degradation)
+        c_factor = 1.0 + max(0, c_rate - 0.5) * (self.high_c_rate_penalty - 1.0)
+
+        # Capacity fade this cycle
+        equiv_cycles = dod_pct / 100.0  # Partial cycles count proportionally
+        fade = self.cycle_fade_pct_per_cycle * equiv_cycles * temp_factor * c_factor / 100.0
+        self.capacity_wh *= (1.0 - fade)
+
+    def calendar_age(self, hours: float):
+        """Apply calendar aging (independent of cycling)."""
+        years = hours / 8760.0
+        fade = self.calendar_fade_pct_per_year * years / 100.0
+        self.capacity_wh *= (1.0 - fade)
+
+    @property
+    def soh_pct(self) -> float:
+        """State of Health — remaining capacity as % of initial."""
+        return (self.capacity_wh / self.initial_capacity_wh) * 100.0
+
+    @property
+    def capacity_fade_pct(self) -> float:
+        """Total capacity lost as %."""
+        return 100.0 - self.soh_pct
+
+    def predict_eol(self, cycles_per_day: float, avg_dod: float = 30.0,
+                     eol_threshold_pct: float = 80.0) -> float:
+        """Predict days until battery reaches end-of-life threshold.
+
+        Returns estimated days until SoH drops below threshold.
+        """
+        # Simple linear extrapolation from current fade rate
+        if self.cycle_count < 10:
+            fade_per_cycle = self.cycle_fade_pct_per_cycle * (avg_dod / 100.0)
+        else:
+            fade_per_cycle = self.capacity_fade_pct / max(self.cycle_count, 1)
+
+        remaining_fade = self.soh_pct - eol_threshold_pct
+        if remaining_fade <= 0:
+            return 0.0
+        if fade_per_cycle <= 0:
+            return float('inf')
+
+        cycles_to_eol = remaining_fade / fade_per_cycle
+        return cycles_to_eol / cycles_per_day
