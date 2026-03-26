@@ -1,0 +1,89 @@
+# Orbital Compute — Example Pod with Orbital Annotations
+# This pod requests orbit-aware scheduling for a GPU training job.
+#
+# The orbital-compute/* annotations are read by the scheduler extender
+# to filter and prioritize satellite nodes based on orbital state.
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: gpu-training-resnet
+  labels:
+    app: ml-training
+    workload-type: gpu-batch
+  annotations:
+    # --- Orbital scheduling constraints ---
+    orbital-compute/min-battery: "30"           # Don't schedule if battery < 30%
+    orbital-compute/prefer-sunlit: "true"       # Prefer satellites in sunlight (free solar power)
+    orbital-compute/max-eclipse-start: "30m"    # Don't start if eclipse begins within 30 minutes
+    orbital-compute/needs-ground-contact: "false" # Doesn't need immediate downlink
+    orbital-compute/power-watts: "500"          # GPU draws ~500W
+
+spec:
+  # Use the orbital-aware scheduler
+  schedulerName: orbital-scheduler
+
+  containers:
+    - name: training
+      image: nvcr.io/nvidia/pytorch:24.01-py3
+      command: ["python", "train.py", "--model=resnet50", "--epochs=10"]
+      resources:
+        requests:
+          cpu: "4"
+          memory: "16Gi"
+          nvidia.com/gpu: "1"
+        limits:
+          cpu: "8"
+          memory: "32Gi"
+          nvidia.com/gpu: "1"
+      volumeMounts:
+        - name: dataset
+          mountPath: /data
+        - name: checkpoints
+          mountPath: /checkpoints
+
+  # Tolerate satellite node conditions
+  tolerations:
+    - key: "orbital-compute/eclipse"
+      operator: "Exists"
+      effect: "NoSchedule"
+    - key: "orbital-compute/low-battery"
+      operator: "Exists"
+      effect: "PreferNoSchedule"
+
+  # Restart if preempted due to power/thermal
+  restartPolicy: OnFailure
+
+  volumes:
+    - name: dataset
+      persistentVolumeClaim:
+        claimName: training-dataset
+    - name: checkpoints
+      persistentVolumeClaim:
+        claimName: training-checkpoints
+
+---
+# Example 2: Data downlink job — needs ground station contact
+apiVersion: v1
+kind: Pod
+metadata:
+  name: data-downlink-results
+  labels:
+    app: data-pipeline
+    workload-type: downlink
+  annotations:
+    orbital-compute/min-battery: "20"
+    orbital-compute/prefer-sunlit: "false"        # Can run in eclipse
+    orbital-compute/needs-ground-contact: "true"  # Must have downlink window
+    orbital-compute/power-watts: "100"            # Low power — just network I/O
+spec:
+  schedulerName: orbital-scheduler
+  containers:
+    - name: downlink
+      image: ghcr.io/orbital-compute/data-pipeline:latest
+      command: ["python", "downlink.py", "--compress=turboquant"]
+      resources:
+        requests:
+          cpu: "1"
+          memory: "4Gi"
+  restartPolicy: OnFailure

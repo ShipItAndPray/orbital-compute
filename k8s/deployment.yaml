@@ -1,0 +1,79 @@
+# Orbital Compute — K8s Scheduler Extender Deployment
+# Deploys the orbit-aware scheduler extender as a service inside the cluster.
+#
+# The extender runs as an HTTP server that the K8s scheduler calls
+# during the filter and prioritize phases of pod scheduling.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orbital-scheduler-extender
+  namespace: kube-system
+  labels:
+    app: orbital-scheduler-extender
+    component: scheduler
+spec:
+  replicas: 2  # HA — two replicas behind the service
+  selector:
+    matchLabels:
+      app: orbital-scheduler-extender
+  template:
+    metadata:
+      labels:
+        app: orbital-scheduler-extender
+    spec:
+      # Run on control plane or ground-based nodes, not on satellites
+      nodeSelector:
+        node-role.kubernetes.io/control-plane: ""
+      tolerations:
+        - key: node-role.kubernetes.io/control-plane
+          effect: NoSchedule
+      containers:
+        - name: extender
+          image: ghcr.io/orbital-compute/k8s-scheduler-extender:latest
+          command: ["python", "-m", "orbital_compute.k8s_scheduler", "--serve"]
+          ports:
+            - containerPort: 8888
+              name: http
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8888
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8888
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          env:
+            - name: ORBITAL_TLE_SOURCE
+              value: "celestrak"
+            - name: ORBITAL_REFRESH_INTERVAL
+              value: "60"  # Refresh orbital state every 60 seconds
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orbital-scheduler-extender
+  namespace: kube-system
+  labels:
+    app: orbital-scheduler-extender
+spec:
+  selector:
+    app: orbital-scheduler-extender
+  ports:
+    - port: 8888
+      targetPort: 8888
+      protocol: TCP
+      name: http
+  type: ClusterIP

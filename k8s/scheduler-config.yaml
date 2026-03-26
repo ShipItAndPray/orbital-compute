@@ -1,0 +1,30 @@
+# Orbital Compute — K8s Scheduler Configuration
+# Tells the kube-scheduler to use our extender for orbit-aware scheduling.
+#
+# Apply this as a KubeSchedulerConfiguration (v1) or pass via
+# --config flag to kube-scheduler.
+#
+# For MicroShift (Axiom): place in /etc/microshift/scheduler-config.yaml
+# For Crusoe Cloud: configure via Crusoe K8s API
+# For vanilla K8s: pass to kube-scheduler --config
+
+apiVersion: kubescheduler.config.k8s.io/v1
+kind: KubeSchedulerConfiguration
+profiles:
+  - schedulerName: orbital-scheduler
+    plugins:
+      # We use the extender mechanism rather than framework plugins
+      # because extenders work across all K8s distributions (vanilla, MicroShift, etc.)
+      {}
+
+extenders:
+  - urlPrefix: "http://orbital-scheduler-extender.kube-system.svc.cluster.local:8888"
+    filterVerb: "filter"
+    prioritizeVerb: "prioritize"
+    weight: 10  # High weight — orbital constraints are critical
+    enableHTTPS: false
+    httpTimeout: 5s  # Timeout for extender calls
+    nodeCacheCapable: false  # We need fresh orbital state each time
+    managedResources:
+      - name: "orbital-compute/gpu-power"
+        ignoredByScheduler: true
