@@ -213,3 +213,38 @@ class LookAheadScheduler(OrbitalScheduler):
             self.completed_jobs.append(job)
             del self.running_jobs[satellite_name]
             self.sat_job_counts[satellite_name] = self.sat_job_counts.get(satellite_name, 0) + 1
+
+
+if __name__ == "__main__":
+    from datetime import datetime, timezone, timedelta
+    from .scheduler import ComputeJob
+    print("=" * 60)
+    print("  LOOK-AHEAD SCHEDULER v2 DEMO")
+    print("=" * 60)
+    sched = LookAheadScheduler()
+    t = datetime(2026, 3, 26, 12, 0, 0, tzinfo=timezone.utc)
+    # Set eclipse forecast: eclipse from t+15min to t+50min
+    sched.set_eclipse_forecast("SAT-0", [
+        (t + timedelta(minutes=15), t + timedelta(minutes=50)),
+        (t + timedelta(minutes=110), t + timedelta(minutes=145)),
+    ])
+    jobs = [ComputeJob(f"J{i}", f"task-{i}", power_watts=300,
+                        duration_seconds=180+i*120, priority=i%4+1)
+            for i in range(6)]
+    sched.submit_jobs(jobs)
+    print(f"\n  6 jobs, 1 satellite, eclipse at t+15min")
+    print(f"  Sunlit remaining: {sched._sunlit_remaining('SAT-0', t):.0f}s")
+    for step in range(60):
+        ts = t + timedelta(minutes=step)
+        eclipse = 15 <= step <= 50
+        batt = 0.4 if eclipse else 0.85
+        d = sched.decide("SAT-0", ts, power_available_w=1500,
+                          battery_pct=batt, thermal_can_compute=True,
+                          thermal_throttle=0.0, in_eclipse=eclipse)
+        if d.action == "run" and d.job:
+            sched.advance_job("SAT-0", 60, 0.0, ts)
+    s = sched.stats()
+    print(f"  Completed: {s['completed']}/{s['total_jobs']}")
+    print(f"  Preempted: {s['preempted']}")
+    print(f"  Load balance: {dict(sched.sat_job_counts)}")
+    print(f"\n{'=' * 60}")
