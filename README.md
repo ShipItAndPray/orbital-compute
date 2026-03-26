@@ -52,8 +52,11 @@ object_detection             1042 GB        5 GB    99.5%      0 GB
 | **Design** | `designer.py` | Auto-design optimal constellation from requirements + budget |
 | **Economics** | `cost_model.py` | CAPEX/OPEX, break-even, ROI, terrestrial comparison. Honest: 24-50x more expensive |
 | **Reliability** | `reliability.py` | MTBF, constellation availability (binomial), SLA analysis, degradation curves |
+| **Debris & Propulsion** | `debris.py`, `propulsion.py` | Collision avoidance, CAM planning, Kessler risk, drag model, station-keeping, deorbit |
+| **Federated Learning** | `federated.py` | Train ML models across constellation (FedAvg/FedProx/SCAFFOLD), ISL-aware aggregation |
+| **K8s Integration** | `k8s_scheduler.py` | Kubernetes scheduler extender for orbit-aware pod placement |
 | **Standards** | `formats.py`, `standards.py` | CCSDS OEM, STK ephemeris, ECSS power/thermal/link budgets |
-| **Interface** | `api.py`, `cli.py`, `simulator.py` | REST API, unified CLI, core simulation engine |
+| **Interface** | `api.py`, `cli.py`, `simulator.py`, `visualize.py` | REST API, unified CLI, core engine, 3D globe generator |
 
 ### Interactive Web App
 
