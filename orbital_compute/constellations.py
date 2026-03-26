@@ -193,3 +193,25 @@ def fetch_real_tles(source: str = "starlink", max_sats: int = 20,
 
     print(f"  Loaded {len(satellites)} real satellites from {source}")
     return satellites
+
+
+if __name__ == "__main__":
+    print("=" * 60)
+    print("  CONSTELLATION CONFIGURATIONS")
+    print("=" * 60)
+    print(f"\n  {'Name':<20} {'Alt km':>7} {'Inc°':>5} {'Planes':>7} {'Sats':>5} {'Total':>6}")
+    print(f"  {'-'*50}")
+    for name, cfg in CONSTELLATIONS.items():
+        print(f"  {name:<20} {cfg.altitude_km:>7.0f} {cfg.inclination_deg:>5.1f} "
+              f"{cfg.n_planes:>7} {cfg.sats_per_plane:>5} {cfg.total_sats:>6}")
+    # Generate and test one
+    cfg = CONSTELLATIONS["starcloud"]
+    sats = generate_constellation(cfg, max_sats=4)
+    from datetime import datetime, timezone
+    t = datetime(2026, 3, 26, 12, 0, 0, tzinfo=timezone.utc)
+    print(f"\n  Generated {len(sats)} sats for '{cfg.name}':")
+    for sat in sats:
+        pos = sat.position_at(t)
+        print(f"    {sat.name}: {pos.altitude_km:.0f}km, {pos.lat_deg:.1f}°N "
+              f"{'[ECLIPSE]' if pos.in_eclipse else ''}")
+    print(f"\n{'=' * 60}")
