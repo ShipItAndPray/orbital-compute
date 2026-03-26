@@ -63,5 +63,24 @@ class TestFederated(unittest.TestCase):
         self.assertGreater(job.communication_rounds, 0)
 
 
+class TestRedNet(unittest.TestCase):
+    def test_rednet_speedup(self):
+        from orbital_compute.radiation import RadiationModel, RecoveryStrategy, RedNetConfig
+        r = RadiationModel(strategy=RecoveryStrategy.REDNET, rednet_config=RedNetConfig())
+        self.assertLess(r.overhead_factor(), 1.0)
+
+    def test_rednet_protection(self):
+        from orbital_compute.radiation import RedNetConfig
+        c = RedNetConfig()
+        self.assertGreater(c.effective_protection, 0.99)
+
+    def test_rednet_recovers_upsets(self):
+        from orbital_compute.radiation import RadiationModel, RecoveryStrategy, RedNetConfig
+        r = RadiationModel(strategy=RecoveryStrategy.REDNET, rednet_config=RedNetConfig(), seed=42)
+        job = type('Job', (), {'failed': False})()
+        result = r.handle_upset(job, True)
+        self.assertEqual(result, "recovered")
+
+
 if __name__ == "__main__":
     unittest.main()
