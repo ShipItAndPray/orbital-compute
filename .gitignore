@@ -16,3 +16,4 @@ orbit_3d.html
 *.log
 venv/
 .venv/
+dist/
