@@ -3,10 +3,10 @@
 **The open-source toolkit for designing, simulating, and operating satellite compute constellations.**
 
 [![Tests](https://github.com/ShipItAndPray/orbital-compute/actions/workflows/test.yml/badge.svg)](https://github.com/ShipItAndPray/orbital-compute/actions)
-[![210+ Tests](https://img.shields.io/badge/tests-210%2B%20passing-brightgreen)](https://github.com/ShipItAndPray/orbital-compute/actions)
+[![215+ Tests](https://img.shields.io/badge/tests-215%2B%20passing-brightgreen)](https://github.com/ShipItAndPray/orbital-compute/actions)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![21K+ Lines](https://img.shields.io/badge/code-21K%2B%20lines-informational)](https://github.com/ShipItAndPray/orbital-compute)
+[![23K+ Lines](https://img.shields.io/badge/code-23K%2B%20lines-informational)](https://github.com/ShipItAndPray/orbital-compute)
 
 **[Live Demo](https://shipitandpray.github.io/orbital-compute/)** | **[3D Globe](https://shipitandpray.github.io/orbital-compute/globe.html)** | **[Cost Calculator](https://shipitandpray.github.io/orbital-compute/cost.html)** | **[Constellation Designer](https://shipitandpray.github.io/orbital-compute/designer.html)** | **[Data Pipeline](https://shipitandpray.github.io/orbital-compute/pipeline.html)**
 
