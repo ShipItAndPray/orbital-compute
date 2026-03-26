@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Documentation - Orbital Compute Simulator</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="index.html" class="nav-brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#4fc3f7" stroke-width="2"><circle cx="12" cy="12" r="3"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(-30 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(30 12 12)"/></svg>
+      Orbital Compute
+    </a>
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="globe.html">3D Globe</a></li>
+      <li><a href="cost.html">Cost Calculator</a></li>
+      <li><a href="api-docs.html" class="active">API Docs</a></li>
+    </ul>
+  </nav>
+
+  <main class="container" style="max-width:900px">
+    <h1 style="font-size:1.5rem;margin-bottom:0.5rem">REST API Documentation</h1>
+    <p style="color:var(--text-muted);margin-bottom:2rem">Programmatic access to the orbital compute simulation engine. Self-host the Python backend to use these endpoints.</p>
+
+    <div class="card" style="margin-bottom:1.5rem">
+      <h3 style="color:var(--accent);margin-bottom:0.5rem">Quick Start</h3>
+      <div class="code-block">
+<span class="comment"># Install and start the API server</span>
+git clone https://github.com/ShipItAndPray/orbital-compute.git
+cd orbital-compute
+pip install -r requirements.txt
+python -m orbital_compute.api --port 8080
+
+<span class="comment"># Test it</span>
+curl http://localhost:8080/status
+      </div>
+    </div>
+
+    <h2 style="font-size:1.2rem;margin:1.5rem 0 1rem">Endpoints</h2>
+
+    <div class="card" style="margin-bottom:1rem">
+      <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem">
+        <span style="background:var(--accent);color:var(--bg);padding:2px 8px;border-radius:3px;font-size:11px;font-weight:700">GET</span>
+        <code style="color:var(--accent);font-size:14px">/status</code>
+      </div>
+      <p style="color:var(--text-muted);font-size:13px;margin-bottom:0.75rem">Constellation overview — satellite count, running jobs, fleet utilization.</p>
+      <div class="code-block">curl http://localhost:8080/status</div>
+      <details style="margin-top:0.5rem"><summary style="color:var(--accent);cursor:pointer;font-size:12px">Example Response</summary>
+      <div class="code-block" style="margin-top:0.5rem">{
+  "n_satellites": 12,
+  "running_jobs": 3,
+  "completed_jobs": 47,
+  "fleet_utilization_pct": 23.5,
+  "total_compute_hours": 22.54
+}</div></details>
+    </div>
+
+    <div class="card" style="margin-bottom:1rem">
+      <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem">
+        <span style="background:var(--accent);color:var(--bg);padding:2px 8px;border-radius:3px;font-size:11px;font-weight:700">GET</span>
+        <code style="color:var(--accent);font-size:14px">/satellites</code>
+      </div>
+      <p style="color:var(--text-muted);font-size:13px;margin-bottom:0.75rem">Per-satellite detail — orbit, power, thermal, compute utilization, contacts.</p>
+      <div class="code-block">curl http://localhost:8080/satellites</div>
+    </div>
+
+    <div class="card" style="margin-bottom:1rem">
+      <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem">
+        <span style="background:var(--accent);color:var(--bg);padding:2px 8px;border-radius:3px;font-size:11px;font-weight:700">GET</span>
+        <code style="color:var(--accent);font-size:14px">/jobs</code>
+      </div>
+      <p style="color:var(--text-muted);font-size:13px;margin-bottom:0.75rem">All jobs grouped by status: pending, running, completed.</p>
+      <div class="code-block">curl http://localhost:8080/jobs</div>
+    </div>
+
+    <div class="card" style="margin-bottom:1rem">
+      <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem">
+        <span style="background:#66bb6a;color:var(--bg);padding:2px 8px;border-radius:3px;font-size:11px;font-weight:700">POST</span>
+        <code style="color:var(--accent);font-size:14px">/jobs</code>
+      </div>
+      <p style="color:var(--text-muted);font-size:13px;margin-bottom:0.75rem">Submit a new compute job. Specify workload type from the catalog.</p>
+      <div class="code-block">curl -X POST http://localhost:8080/jobs \
+  -H "Content-Type: application/json" \
+  -d '{"workload": "image_classification"}'</div>
+      <details style="margin-top:0.5rem"><summary style="color:var(--accent);cursor:pointer;font-size:12px">Available Workloads</summary>
+      <div class="code-block" style="margin-top:0.5rem">image_classification  — 200W, 120s, Earth Observation
+change_detection      — 300W, 300s, Earth Observation
+object_tracking       — 400W, 60s,  Earth Observation (realtime)
+llm_inference         — 600W, 30s,  AI Inference (realtime)
+image_generation      — 500W, 45s,  AI Inference
+weather_model         — 800W, 3600s, Scientific (batch)
+climate_analysis      — 700W, 7200s, Scientific (batch)
+sar_processing        — 500W, 180s, Defense/ISR
+signal_analysis       — 300W, 60s,  Defense/ISR (realtime)</div></details>
+    </div>
+
+    <div class="card" style="margin-bottom:1rem">
+      <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem">
+        <span style="background:var(--accent);color:var(--bg);padding:2px 8px;border-radius:3px;font-size:11px;font-weight:700">GET</span>
+        <code style="color:var(--accent);font-size:14px">/contacts</code>
+      </div>
+      <p style="color:var(--text-muted);font-size:13px;margin-bottom:0.75rem">Upcoming ground station contact windows per satellite.</p>
+      <div class="code-block">curl http://localhost:8080/contacts</div>
+    </div>
+
+    <div class="card" style="margin-bottom:1rem">
+      <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem">
+        <span style="background:var(--accent);color:var(--bg);padding:2px 8px;border-radius:3px;font-size:11px;font-weight:700">GET</span>
+        <code style="color:var(--accent);font-size:14px">/metrics</code>
+      </div>
+      <p style="color:var(--text-muted);font-size:13px;margin-bottom:0.75rem">Fleet utilization, job throughput, power/thermal statistics.</p>
+      <div class="code-block">curl http://localhost:8080/metrics</div>
+    </div>
+
+    <h2 style="font-size:1.2rem;margin:1.5rem 0 1rem">Python Library</h2>
+    <div class="card">
+      <div class="code-block"><span class="comment"># Use as a Python library</span>
+from orbital_compute.simulator import Simulation, SimulationConfig
+
+config = SimulationConfig(
+    n_satellites=12,
+    sim_duration_hours=24,
+    n_jobs=100,
+    solar_panel_watts=2000,
+    battery_capacity_wh=5000,
+)
+sim = Simulation(config)
+sim.setup()
+results = sim.run()
+sim.print_report()
+
+<span class="comment"># Access results</span>
+print(f"Completed: {results['scheduler']['completed']}")
+print(f"Utilization: {results['fleet_utilization_pct']}%")</div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    Orbital Compute Simulator &mdash; <a href="https://github.com/ShipItAndPray/orbital-compute" style="color:var(--accent)">GitHub</a>
+  </footer>
+</body>
+</html>
