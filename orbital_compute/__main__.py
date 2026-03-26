@@ -25,6 +25,9 @@ def main():
     print("    python -m orbital_compute network   — ISL mesh analysis")
     print("    python -m orbital_compute k8s       — K8s scheduler demo")
     print("    python -m orbital_compute mission   — Mission planning timeline")
+    print("    python -m orbital_compute debris    — Orbital debris risk assessment")
+    print("    python -m orbital_compute propulsion — Station-keeping & deorbit planning")
+    print("    python -m orbital_compute federated — Federated learning simulation")
     print()
     print("  Web app: https://shipitandpray.github.io/orbital-compute/")
     print("  GitHub:  https://github.com/ShipItAndPray/orbital-compute")
@@ -49,6 +52,9 @@ def main():
         "network": lambda: __import__("orbital_compute.network", fromlist=["__main__"]),
         "k8s": lambda: __import__("orbital_compute.k8s_scheduler", fromlist=["__main__"]),
         "mission": lambda: __import__("orbital_compute.mission_planner", fromlist=["__main__"]),
+        "debris": lambda: __import__("orbital_compute.debris", fromlist=["__main__"]),
+        "propulsion": lambda: __import__("orbital_compute.propulsion", fromlist=["__main__"]),
+        "federated": lambda: __import__("orbital_compute.federated", fromlist=["__main__"]),
     }
 
     if cmd in commands:
