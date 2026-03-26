@@ -1,7 +1,7 @@
 # Show HN Submission
 
 ## Title (80 chars max)
-Show HN: Simulate satellite compute constellations – orbital mechanics to K8s scheduling
+Show HN: Orbital compute is 50x more expensive than AWS – here's the math (open source)
 
 ## URL
 https://github.com/ShipItAndPray/orbital-compute
