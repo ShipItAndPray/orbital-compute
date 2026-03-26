@@ -224,3 +224,26 @@ def _fix_tle_checksum(line: str) -> str:
             checksum += 1
     line = line[:68] + str(checksum % 10)
     return line
+
+
+if __name__ == "__main__":
+    from datetime import datetime, timezone
+    print("=" * 60)
+    print("  ORBITAL MECHANICS DEMO")
+    print("=" * 60)
+    sats = starlink_shell_1_sample(6)
+    t = datetime(2026, 3, 26, 12, 0, 0, tzinfo=timezone.utc)
+    print(f"\n  6 satellites at 550km, 53° inclination")
+    print(f"  Time: {t.isoformat()}\n")
+    print(f"  {'Satellite':<10} {'Lat':>7} {'Lon':>8} {'Alt km':>7} {'Eclipse':>8}")
+    print(f"  {'-'*40}")
+    for sat in sats:
+        pos = sat.position_at(t)
+        print(f"  {sat.name:<10} {pos.lat_deg:>6.1f}° {pos.lon_deg:>7.1f}° "
+              f"{pos.altitude_km:>6.0f} {'YES' if pos.in_eclipse else 'no':>8}")
+    windows = predict_eclipse_windows(sats[0], t, 6.0)
+    print(f"\n  Eclipse windows for {sats[0].name} (next 6h):")
+    for i, (start, end) in enumerate(windows[:4]):
+        dur = (end - start).total_seconds() / 60
+        print(f"    {start.strftime('%H:%M')} → {end.strftime('%H:%M')} ({dur:.0f} min)")
+    print(f"\n{'=' * 60}")
