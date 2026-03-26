@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Pipeline Analysis - Orbital Compute Simulator</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="index.html" class="nav-brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#4fc3f7" stroke-width="2"><circle cx="12" cy="12" r="3"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(-30 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(30 12 12)"/></svg>
+      Orbital Compute
+    </a>
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="globe.html">3D Globe</a></li>
+      <li><a href="cost.html">Cost Calculator</a></li>
+      <li><a href="pipeline.html" class="active">Data Pipeline</a></li>
+      <li><a href="api-docs.html">API Docs</a></li>
+    </ul>
+  </nav>
+
+  <main class="container-wide">
+    <div class="hero" style="padding:2rem 2rem 1rem">
+      <h1 style="font-size:2rem">Data Pipeline Analysis</h1>
+      <p class="tagline">Why in-orbit processing exists &mdash; the bandwidth bottleneck, visualized.</p>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls-panel">
+      <div class="controls-grid">
+        <div class="control-group">
+          <label>Sensor Data Rate <span class="control-value" id="val-datarate">1000</span> Mbps</label>
+          <input type="range" id="sensor-datarate" min="100" max="5000" value="1000" step="50">
+        </div>
+        <div class="control-group">
+          <label>Sensor Duty Cycle <span class="control-value" id="val-duty">50</span>%</label>
+          <input type="range" id="sensor-duty" min="10" max="100" value="50" step="5">
+        </div>
+        <div class="control-group">
+          <label>Downlink Band</label>
+          <select id="downlink-band">
+            <option value="10">S-band (10 Mbps)</option>
+            <option value="800" selected>X-band (800 Mbps)</option>
+            <option value="2000">Ka-band (2 Gbps)</option>
+            <option value="10000">Optical (10 Gbps)</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label>Contact Time / Orbit <span class="control-value" id="val-contact">10</span> min</label>
+          <input type="range" id="contact-time" min="1" max="30" value="10">
+        </div>
+        <div class="control-group">
+          <label>Processing Type</label>
+          <select id="processing-type">
+            <option value="1">Raw (no reduction)</option>
+            <option value="100" selected>Image Classification (100x)</option>
+            <option value="50">Change Detection (50x)</option>
+            <option value="200">Object Detection (200x)</option>
+            <option value="10">SAR Processing (10x)</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label>Number of Orbits <span class="control-value" id="val-orbits">24</span></label>
+          <input type="range" id="num-orbits" min="1" max="50" value="24">
+        </div>
+        <div class="control-group">
+          <label>Storage Capacity <span class="control-value" id="val-storage">2000</span> GB</label>
+          <input type="range" id="storage-capacity" min="100" max="10000" value="2000" step="100">
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="card-grid" style="grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); margin-bottom:1.5rem" id="summary-cards">
+      <div class="card text-center">
+        <div class="text-muted text-sm">Data Generated</div>
+        <div id="stat-generated" class="stat-value" style="font-size:1.3rem">--</div>
+      </div>
+      <div class="card text-center">
+        <div class="text-muted text-sm">Data Downlinked</div>
+        <div id="stat-downlinked" class="stat-value" style="font-size:1.3rem">--</div>
+      </div>
+      <div class="card text-center">
+        <div class="text-muted text-sm">Bandwidth Saved</div>
+        <div id="stat-saved" class="stat-value" style="font-size:1.3rem;color:var(--success)">--</div>
+      </div>
+      <div class="card text-center">
+        <div class="text-muted text-sm">Peak Storage (Raw)</div>
+        <div id="stat-peak" class="stat-value" style="font-size:1.3rem">--</div>
+      </div>
+      <div class="card text-center">
+        <div class="text-muted text-sm">Data Lost (Raw)</div>
+        <div id="stat-lost" class="stat-value" style="font-size:1.3rem;color:var(--danger)">--</div>
+      </div>
+    </div>
+
+    <!-- Side-by-side comparison -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem">
+      <div class="card" id="compare-raw">
+        <h3 style="color:var(--danger);margin-bottom:1rem">Raw Downlink</h3>
+        <div style="display:flex;flex-direction:column;gap:0.75rem" id="raw-stats"></div>
+      </div>
+      <div class="card" id="compare-processed">
+        <h3 style="color:var(--accent);margin-bottom:1rem">In-Orbit Processing</h3>
+        <div style="display:flex;flex-direction:column;gap:0.75rem" id="processed-stats"></div>
+      </div>
+    </div>
+
+    <!-- The Key Chart -->
+    <div class="chart-container" style="margin-bottom:1.5rem">
+      <div class="chart-title">Onboard Storage Over Time &mdash; The Killer Chart</div>
+      <canvas id="chart-storage" style="height:350px"></canvas>
+      <div style="display:flex;gap:2rem;justify-content:center;margin-top:0.75rem">
+        <div style="display:flex;align-items:center;gap:0.4rem">
+          <span style="width:28px;height:4px;background:#ef5350;border-radius:2px;display:inline-block"></span>
+          <span class="text-sm text-muted">Raw Downlink</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.4rem">
+          <span style="width:28px;height:4px;background:#4fc3f7;border-radius:2px;display:inline-block"></span>
+          <span class="text-sm text-muted">In-Orbit Processing</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.4rem">
+          <span style="width:28px;height:2px;background:#ffa726;border-radius:1px;display:inline-block;border-top:2px dashed #ffa726"></span>
+          <span class="text-sm text-muted">Storage Capacity</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data Reduction Ratio Bar -->
+    <div class="chart-container" style="margin-bottom:1.5rem">
+      <div class="chart-title">Data Reduction Ratio</div>
+      <canvas id="chart-reduction" style="height:120px"></canvas>
+    </div>
+
+    <!-- Verdict -->
+    <div class="card" style="margin-bottom:2rem;border-left:3px solid var(--accent)">
+      <h3 style="margin-bottom:0.5rem">Verdict</h3>
+      <p id="verdict-text" class="text-muted" style="font-size:0.95rem;line-height:1.7">--</p>
+    </div>
+  </main>
+
+  <footer class="footer">
+    Orbital Compute Simulator &mdash; Data Pipeline Analysis
+  </footer>
+
+  <script>
+    // === State ===
+    const els = {
+      datarate: document.getElementById('sensor-datarate'),
+      duty: document.getElementById('sensor-duty'),
+      band: document.getElementById('downlink-band'),
+      contact: document.getElementById('contact-time'),
+      processing: document.getElementById('processing-type'),
+      orbits: document.getElementById('num-orbits'),
+      storage: document.getElementById('storage-capacity'),
+    };
+
+    const valEls = {
+      datarate: document.getElementById('val-datarate'),
+      duty: document.getElementById('val-duty'),
+      contact: document.getElementById('val-contact'),
+      orbits: document.getElementById('val-orbits'),
+      storage: document.getElementById('val-storage'),
+    };
+
+    // Update value displays on slider input
+    Object.keys(valEls).forEach(key => {
+      els[key].addEventListener('input', () => {
+        valEls[key].textContent = els[key].value;
+        recalculate();
+      });
+    });
+    els.band.addEventListener('change', recalculate);
+    els.processing.addEventListener('change', recalculate);
+
+    function getParams() {
+      const orbitPeriodMin = 95; // ~LEO orbit
+      return {
+        datarateMbps: +els.datarate.value,
+        dutyCycle: +els.duty.value / 100,
+        downlinkMbps: +els.band.value,
+        contactMin: +els.contact.value,
+        reductionFactor: +els.processing.value,
+        numOrbits: +els.orbits.value,
+        storageGB: +els.storage.value,
+        orbitPeriodMin: orbitPeriodMin,
+        collectMin: orbitPeriodMin - (+els.contact.value), // collection happens outside contact
+      };
+    }
+
+    function simulate(p) {
+      const results = { raw: [], processed: [] };
+      let rawStorage = 0, procStorage = 0;
+      let rawLost = 0;
+      let totalGenerated = 0, totalDownlinkedRaw = 0, totalDownlinkedProc = 0;
+
+      for (let i = 1; i <= p.numOrbits; i++) {
+        // Data generated this orbit (GB) = rate * duty * collect time
+        const collectSec = p.collectMin * 60;
+        const generatedGB = (p.datarateMbps * p.dutyCycle * collectSec) / 8 / 1000;
+        totalGenerated += generatedGB;
+
+        // Downlink capacity per contact (GB)
+        const downlinkGB = (p.downlinkMbps * p.contactMin * 60) / 8 / 1000;
+
+        // === Raw path ===
+        rawStorage += generatedGB;
+        const rawDownlink = Math.min(rawStorage, downlinkGB);
+        rawStorage -= rawDownlink;
+        totalDownlinkedRaw += rawDownlink;
+        // Check overflow
+        if (rawStorage > p.storageGB) {
+          rawLost += rawStorage - p.storageGB;
+          rawStorage = p.storageGB;
+        }
+        results.raw.push(rawStorage);
+
+        // === Processed path ===
+        const processedGB = generatedGB / p.reductionFactor;
+        procStorage += processedGB;
+        const procDownlink = Math.min(procStorage, downlinkGB);
+        procStorage -= procDownlink;
+        totalDownlinkedProc += procDownlink;
+        if (procStorage > p.storageGB) {
+          procStorage = p.storageGB;
+        }
+        results.processed.push(procStorage);
+      }
+
+      return {
+        ...results,
+        totalGenerated,
+        totalDownlinkedRaw,
+        totalDownlinkedProc,
+        rawLost,
+        peakRaw: Math.max(...results.raw),
+        peakProc: Math.max(...results.processed),
+        reductionFactor: p.reductionFactor,
+      };
+    }
+
+    function fmt(gb) {
+      if (gb >= 1000) return (gb / 1000).toFixed(1) + ' TB';
+      return gb.toFixed(1) + ' GB';
+    }
+
+    function drawStorageChart(p, sim) {
+      const canvas = document.getElementById('chart-storage');
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      const ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+      const W = rect.width, H = rect.height;
+
+      ctx.clearRect(0, 0, W, H);
+
+      const pad = { top: 20, right: 30, bottom: 40, left: 60 };
+      const plotW = W - pad.left - pad.right;
+      const plotH = H - pad.top - pad.bottom;
+
+      const maxY = Math.max(p.storageGB, sim.peakRaw) * 1.1;
+      const n = p.numOrbits;
+
+      function xPos(i) { return pad.left + (i / (n - 1 || 1)) * plotW; }
+      function yPos(v) { return pad.top + plotH - (v / maxY) * plotH; }
+
+      // Grid lines
+      ctx.strokeStyle = 'rgba(30,42,66,0.8)';
+      ctx.lineWidth = 1;
+      const gridSteps = 5;
+      for (let i = 0; i <= gridSteps; i++) {
+        const y = pad.top + (i / gridSteps) * plotH;
+        ctx.beginPath();
+        ctx.moveTo(pad.left, y);
+        ctx.lineTo(W - pad.right, y);
+        ctx.stroke();
+        const val = maxY - (i / gridSteps) * maxY;
+        ctx.fillStyle = '#5a6478';
+        ctx.font = '11px Inter, sans-serif';
+        ctx.textAlign = 'right';
+        ctx.fillText(fmt(val), pad.left - 8, y + 4);
+      }
+
+      // X axis labels
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#5a6478';
+      const xStep = Math.max(1, Math.floor(n / 10));
+      for (let i = 0; i < n; i += xStep) {
+        ctx.fillText('Orbit ' + (i + 1), xPos(i), H - pad.bottom + 20);
+      }
+      // Always label last
+      if ((n - 1) % xStep !== 0) {
+        ctx.fillText('Orbit ' + n, xPos(n - 1), H - pad.bottom + 20);
+      }
+
+      // Y axis label
+      ctx.save();
+      ctx.translate(14, pad.top + plotH / 2);
+      ctx.rotate(-Math.PI / 2);
+      ctx.fillStyle = '#8892a4';
+      ctx.font = '12px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('Storage (GB)', 0, 0);
+      ctx.restore();
+
+      // Storage capacity line (dashed)
+      ctx.save();
+      ctx.setLineDash([8, 4]);
+      ctx.strokeStyle = '#ffa726';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(pad.left, yPos(p.storageGB));
+      ctx.lineTo(W - pad.right, yPos(p.storageGB));
+      ctx.stroke();
+      ctx.restore();
+
+      // Capacity label
+      ctx.fillStyle = '#ffa726';
+      ctx.font = '11px Inter, sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText('Capacity: ' + fmt(p.storageGB), W - pad.right - 120, yPos(p.storageGB) - 6);
+
+      // Fill area under raw line where it exceeds capacity
+      const overflowOrbit = sim.raw.findIndex(v => v >= p.storageGB * 0.99);
+      if (overflowOrbit >= 0) {
+        ctx.fillStyle = 'rgba(239, 83, 80, 0.08)';
+        ctx.beginPath();
+        ctx.moveTo(xPos(overflowOrbit), yPos(p.storageGB));
+        for (let i = overflowOrbit; i < n; i++) {
+          ctx.lineTo(xPos(i), yPos(Math.min(sim.raw[i], maxY)));
+        }
+        ctx.lineTo(xPos(n - 1), yPos(p.storageGB));
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      // Draw raw line (red)
+      ctx.strokeStyle = '#ef5350';
+      ctx.lineWidth = 2.5;
+      ctx.setLineDash([]);
+      ctx.beginPath();
+      for (let i = 0; i < n; i++) {
+        const x = xPos(i), y = yPos(sim.raw[i]);
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      // Draw processed line (blue)
+      ctx.strokeStyle = '#4fc3f7';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      for (let i = 0; i < n; i++) {
+        const x = xPos(i), y = yPos(sim.processed[i]);
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      // Overflow marker
+      if (overflowOrbit >= 0) {
+        const ox = xPos(overflowOrbit), oy = yPos(sim.raw[overflowOrbit]);
+        ctx.fillStyle = '#ef5350';
+        ctx.beginPath();
+        ctx.arc(ox, oy, 5, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#ef5350';
+        ctx.font = 'bold 11px Inter, sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText('DATA LOSS BEGINS', ox + 10, oy - 8);
+      }
+    }
+
+    function drawReductionChart(p, sim) {
+      const canvas = document.getElementById('chart-reduction');
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      const ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+      const W = rect.width, H = rect.height;
+
+      ctx.clearRect(0, 0, W, H);
+
+      const pad = { left: 20, right: 20, top: 15, bottom: 25 };
+      const barH = 28;
+      const barY1 = pad.top;
+      const barY2 = pad.top + barH + 16;
+      const barMaxW = W - pad.left - pad.right;
+
+      // Raw bar (full width)
+      ctx.fillStyle = 'rgba(239, 83, 80, 0.25)';
+      ctx.strokeStyle = '#ef5350';
+      ctx.lineWidth = 1.5;
+      const roundR = 4;
+      roundRect(ctx, pad.left, barY1, barMaxW, barH, roundR);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = '#e0e6f0';
+      ctx.font = 'bold 13px Inter, sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText('Raw: ' + fmt(sim.totalGenerated), pad.left + 12, barY1 + barH / 2 + 5);
+
+      // Processed bar (proportional)
+      const ratio = 1 / sim.reductionFactor;
+      const procW = Math.max(barMaxW * ratio, 40);
+      ctx.fillStyle = 'rgba(79, 195, 247, 0.3)';
+      ctx.strokeStyle = '#4fc3f7';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      roundRect(ctx, pad.left, barY2, procW, barH, roundR);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = '#e0e6f0';
+      ctx.font = 'bold 13px Inter, sans-serif';
+      ctx.textAlign = 'left';
+      const procText = 'Processed: ' + fmt(sim.totalGenerated / sim.reductionFactor);
+      const textX = pad.left + procW + 10;
+      ctx.fillText(procText, textX > W - 150 ? pad.left + 12 : textX, barY2 + barH / 2 + 5);
+
+      // Reduction label
+      ctx.fillStyle = 'var(--accent)';
+      ctx.fillStyle = '#4fc3f7';
+      ctx.font = 'bold 14px Inter, sans-serif';
+      ctx.textAlign = 'right';
+      ctx.fillText(sim.reductionFactor + 'x reduction', W - pad.right, barY2 + barH + 20);
+    }
+
+    function roundRect(ctx, x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + w - r, y);
+      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+      ctx.lineTo(x + w, y + h - r);
+      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      ctx.lineTo(x + r, y + h);
+      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.closePath();
+    }
+
+    function makeStat(label, value) {
+      return `<div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid var(--border)">
+        <span class="text-muted text-sm">${label}</span>
+        <span class="text-sm fw-bold">${value}</span>
+      </div>`;
+    }
+
+    function recalculate() {
+      const p = getParams();
+      const sim = simulate(p);
+
+      // Summary cards
+      document.getElementById('stat-generated').textContent = fmt(sim.totalGenerated);
+      document.getElementById('stat-downlinked').textContent = fmt(sim.totalDownlinkedProc);
+
+      const savedPct = sim.reductionFactor > 1
+        ? ((1 - 1 / sim.reductionFactor) * 100).toFixed(1)
+        : '0';
+      document.getElementById('stat-saved').textContent = savedPct + '%';
+      document.getElementById('stat-peak').textContent = fmt(sim.peakRaw);
+      document.getElementById('stat-lost').textContent = sim.rawLost > 0 ? fmt(sim.rawLost) : 'None';
+      document.getElementById('stat-lost').style.color = sim.rawLost > 0 ? 'var(--danger)' : 'var(--success)';
+
+      // Side-by-side
+      const downlinkGB = (p.downlinkMbps * p.contactMin * 60) / 8 / 1000;
+      const orbitsToOverflow = sim.raw.findIndex(v => v >= p.storageGB * 0.99);
+
+      document.getElementById('raw-stats').innerHTML = [
+        makeStat('Total Data', fmt(sim.totalGenerated)),
+        makeStat('Downlinked', fmt(sim.totalDownlinkedRaw)),
+        makeStat('Peak Storage', fmt(sim.peakRaw)),
+        makeStat('Data Lost', sim.rawLost > 0
+          ? `<span style="color:var(--danger)">${fmt(sim.rawLost)}</span>`
+          : '<span style="color:var(--success)">None</span>'),
+        makeStat('Overflow at', orbitsToOverflow >= 0
+          ? `<span style="color:var(--danger)">Orbit ${orbitsToOverflow + 1}</span>`
+          : '<span style="color:var(--success)">Never</span>'),
+        makeStat('Downlink / Orbit', fmt(downlinkGB)),
+      ].join('');
+
+      const processedPerOrbit = (p.datarateMbps * p.dutyCycle * p.collectMin * 60) / 8 / 1000 / p.reductionFactor;
+      document.getElementById('processed-stats').innerHTML = [
+        makeStat('Total Data', fmt(sim.totalGenerated / p.reductionFactor)),
+        makeStat('Downlinked', fmt(sim.totalDownlinkedProc)),
+        makeStat('Peak Storage', fmt(sim.peakProc)),
+        makeStat('Data Lost', '<span style="color:var(--success)">None</span>'),
+        makeStat('Reduction', p.reductionFactor + 'x'),
+        makeStat('Per Orbit Out', fmt(processedPerOrbit)),
+      ].join('');
+
+      // Verdict
+      const verdictEl = document.getElementById('verdict-text');
+      if (p.reductionFactor <= 1) {
+        verdictEl.innerHTML = 'No on-board processing selected. All raw data must be downlinked, limited by contact windows.';
+        verdictEl.style.color = 'var(--text-secondary)';
+      } else if (orbitsToOverflow >= 0) {
+        verdictEl.innerHTML = `<strong style="color:var(--danger)">In-orbit processing is essential.</strong> Without it, onboard storage overflows at orbit ${orbitsToOverflow + 1}, losing <strong>${fmt(sim.rawLost)}</strong> of sensor data. The sensor generates data ${(p.datarateMbps * p.dutyCycle / p.downlinkMbps).toFixed(1)}x faster than the downlink can drain it. With ${p.reductionFactor}x on-board reduction, peak storage stays at just <strong>${fmt(sim.peakProc)}</strong> &mdash; well within the ${fmt(p.storageGB)} capacity.`;
+        verdictEl.style.color = 'var(--text-primary)';
+      } else if (sim.peakRaw > p.storageGB * 0.7) {
+        verdictEl.innerHTML = `<strong style="color:var(--warning)">In-orbit processing is strongly recommended.</strong> Raw storage peaks at ${fmt(sim.peakRaw)}, which is ${((sim.peakRaw / p.storageGB) * 100).toFixed(0)}% of capacity. A longer mission or higher duty cycle would cause overflow. With ${p.reductionFactor}x reduction, peak storage drops to just ${fmt(sim.peakProc)}.`;
+        verdictEl.style.color = 'var(--text-primary)';
+      } else {
+        verdictEl.innerHTML = `<strong style="color:var(--success)">Downlink is sufficient for this configuration.</strong> The ${p.downlinkMbps} Mbps link can keep up with the sensor data rate. Peak storage is only ${fmt(sim.peakRaw)} (${((sim.peakRaw / p.storageGB) * 100).toFixed(0)}% of capacity). However, in-orbit processing would still reduce storage needs by ${p.reductionFactor}x and free bandwidth for other uses.`;
+        verdictEl.style.color = 'var(--text-primary)';
+      }
+
+      // Draw charts
+      drawStorageChart(p, sim);
+      drawReductionChart(p, sim);
+    }
+
+    // Initial calculation
+    recalculate();
+
+    // Redraw on resize
+    window.addEventListener('resize', recalculate);
+  </script>
+</body>
+</html>
