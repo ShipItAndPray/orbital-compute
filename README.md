@@ -75,6 +75,9 @@ git clone https://github.com/ShipItAndPray/orbital-compute.git
 cd orbital-compute
 pip install -r requirements.txt
 
+# 30-second overview of everything
+python -m orbital_compute
+
 # Full demo (all subsystems: orbit + power + thermal + ISL + radiation + scheduling)
 python demo.py
 
@@ -113,6 +116,13 @@ python benchmark.py
 
 # Fetch real Starlink TLEs
 python -m orbital_compute.constellations
+
+# Or use make shortcuts
+make test        # Run 200+ tests
+make demo        # Full demo
+make cost        # Cost analysis
+make pipeline    # Data pipeline proof
+make serve       # Local web app
 ```
 
 ## Key Results
