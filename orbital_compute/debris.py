@@ -472,40 +472,58 @@ def kessler_critical_size(
     """Find the constellation size where debris generation exceeds removal.
 
     This is the tipping point for Kessler syndrome at this altitude.
-    Returns the approximate number of objects at which fragment generation
-    rate equals the natural removal rate of the existing population.
+    We model the balance between:
+      - Fragment generation: constellation-on-debris collisions producing
+        ~1500 trackable fragments each
+      - Fragment removal: atmospheric drag clearing debris at altitude-
+        dependent rates
+
+    The critical size N satisfies:
+      N * P_collision_tracked * fragments_per_collision = removal_rate * existing_pop
+
+    Note: this is a simplified steady-state model. Real Kessler dynamics
+    involve feedback loops (new debris raises future collision rates).
     """
     env = DebrisEnvironment.at_altitude(altitude_km)
     removal_rate = atmospheric_drag_removal_rate(altitude_km)
 
-    # Current debris population in this altitude band (approximate)
-    shell_volume = 4 * math.pi * (EARTH_RADIUS_KM + altitude_km) ** 2 * 100  # 100 km band
-    current_objects = env.tracked_density_per_km3 * shell_volume
+    # Current tracked debris population in this altitude band (approximate)
+    # Use a 100 km thick shell at this altitude
+    shell_volume = 4.0 * math.pi * (EARTH_RADIUS_KM + altitude_km) ** 2 * 100.0
+    current_tracked = env.tracked_density_per_km3 * shell_volume
 
     # Objects removed per year by drag
-    objects_removed_per_year = current_objects * removal_rate
+    objects_removed_per_year = current_tracked * removal_rate
 
-    if objects_removed_per_year < 1e-10:
-        # No meaningful drag — Kessler threshold is very low
-        return 50
+    if objects_removed_per_year < 1e-12:
+        # Negligible drag at this altitude — even small constellations
+        # contribute to long-term debris growth.
+        return max(50, int(100 * (1.0 - min(altitude_km, 2000) / 2000)))
 
-    # Solve: frag_rate(N) = removal_rate * (current_objects + N)
-    # frag_rate(N) = N * env.total_density * sigma * v * seconds * 1500
+    # Collision rate per constellation satellite vs tracked debris
+    # Use tracked density only (large objects cause catastrophic collisions)
     orbital_speed = math.sqrt(MU_EARTH / (EARTH_RADIUS_KM + altitude_km))
-    rate_per_object = (
-        env.total_density_per_km3
-        * cross_section_km2
+
+    # Effective cross-section for catastrophic collision is larger than
+    # geometric — includes the debris object size (~1-5 m^2).
+    effective_cross_section = cross_section_km2 * 5.0  # ~5 m^2 combined
+
+    collision_rate_per_sat = (
+        env.tracked_density_per_km3
+        * effective_cross_section
         * orbital_speed
         * SECONDS_PER_YEAR
-        * 1500
     )
 
-    if rate_per_object < 1e-20:
+    fragments_per_collision = 1500
+
+    # N_crit: N * collision_rate * fragments = removal_rate * population
+    fragments_per_sat_per_year = collision_rate_per_sat * fragments_per_collision
+
+    if fragments_per_sat_per_year < 1e-20:
         return 1_000_000  # effectively no Kessler risk
 
-    # N_crit where N * rate_per_object = removal_rate * current_objects
-    # (simplified — ignoring that N itself adds to the environment)
-    n_crit = int(objects_removed_per_year / rate_per_object)
+    n_crit = int(objects_removed_per_year / fragments_per_sat_per_year)
     return max(n_crit, 10)
 
 
