@@ -1,0 +1,191 @@
+{
+  "config": {
+    "n_satellites": 6,
+    "sim_hours": 6.0,
+    "n_jobs": 20
+  },
+  "scheduler": {
+    "total_jobs": 20,
+    "completed": 20,
+    "running": 0,
+    "queued": 0,
+    "preempted": 0,
+    "idle_steps": 1523,
+    "charge_steps": 0
+  },
+  "fleet_utilization_pct": 29.0,
+  "total_compute_hours": 10.44,
+  "satellite_details": {
+    "SAT-000": {
+      "compute_pct": 0.0,
+      "eclipse_pct": 0.0,
+      "avg_battery_pct": 80.6,
+      "avg_temp_c": 24.1,
+      "max_temp_c": 24.1,
+      "min_battery_pct": 80.6
+    },
+    "SAT-001": {
+      "compute_pct": 0.0,
+      "eclipse_pct": 0.0,
+      "avg_battery_pct": 80.6,
+      "avg_temp_c": 24.1,
+      "max_temp_c": 24.1,
+      "min_battery_pct": 80.6
+    },
+    "SAT-002": {
+      "compute_pct": 0.0,
+      "eclipse_pct": 0.0,
+      "avg_battery_pct": 80.6,
+      "avg_temp_c": 24.1,
+      "max_temp_c": 24.1,
+      "min_battery_pct": 80.6
+    },
+    "SAT-003": {
+      "compute_pct": 0.0,
+      "eclipse_pct": 0.0,
+      "avg_battery_pct": 80.6,
+      "avg_temp_c": 24.1,
+      "max_temp_c": 24.1,
+      "min_battery_pct": 80.6
+    },
+    "SAT-004": {
+      "compute_pct": 0.0,
+      "eclipse_pct": 0.0,
+      "avg_battery_pct": 80.6,
+      "avg_temp_c": 24.1,
+      "max_temp_c": 24.1,
+      "min_battery_pct": 80.6
+    },
+    "SAT-005": {
+      "compute_pct": 0.0,
+      "eclipse_pct": 0.0,
+      "avg_battery_pct": 80.6,
+      "avg_temp_c": 24.1,
+      "max_temp_c": 24.1,
+      "min_battery_pct": 80.6
+    }
+  },
+  "completed_jobs": [
+    {
+      "job_id": "JOB-0000",
+      "satellite": "SAT-005",
+      "duration_s": 382.5,
+      "power_w": 583.7
+    },
+    {
+      "job_id": "JOB-0002",
+      "satellite": "SAT-005",
+      "duration_s": 404.9,
+      "power_w": 554.3
+    },
+    {
+      "job_id": "JOB-0015",
+      "satellite": "SAT-002",
+      "duration_s": 991.4,
+      "power_w": 422.1
+    },
+    {
+      "job_id": "JOB-0005",
+      "satellite": "SAT-003",
+      "duration_s": 1218.0,
+      "power_w": 469.5
+    },
+    {
+      "job_id": "JOB-0014",
+      "satellite": "SAT-004",
+      "duration_s": 2397.8,
+      "power_w": 366.8
+    },
+    {
+      "job_id": "JOB-0006",
+      "satellite": "SAT-003",
+      "duration_s": 1422.8,
+      "power_w": 618.9
+    },
+    {
+      "job_id": "JOB-0001",
+      "satellite": "SAT-000",
+      "duration_s": 2730.4,
+      "power_w": 333.9
+    },
+    {
+      "job_id": "JOB-0009",
+      "satellite": "SAT-001",
+      "duration_s": 2708.1,
+      "power_w": 684.3
+    },
+    {
+      "job_id": "JOB-0003",
+      "satellite": "SAT-005",
+      "duration_s": 2286.7,
+      "power_w": 339.6
+    },
+    {
+      "job_id": "JOB-0016",
+      "satellite": "SAT-003",
+      "duration_s": 864.8,
+      "power_w": 565.5
+    },
+    {
+      "job_id": "JOB-0004",
+      "satellite": "SAT-002",
+      "duration_s": 2614.4,
+      "power_w": 629.6
+    },
+    {
+      "job_id": "JOB-0012",
+      "satellite": "SAT-002",
+      "duration_s": 451.2,
+      "power_w": 622.7
+    },
+    {
+      "job_id": "JOB-0017",
+      "satellite": "SAT-000",
+      "duration_s": 1552.2,
+      "power_w": 298.0
+    },
+    {
+      "job_id": "JOB-0011",
+      "satellite": "SAT-004",
+      "duration_s": 2341.1,
+      "power_w": 697.6
+    },
+    {
+      "job_id": "JOB-0010",
+      "satellite": "SAT-003",
+      "duration_s": 1549.2,
+      "power_w": 783.9
+    },
+    {
+      "job_id": "JOB-0007",
+      "satellite": "SAT-000",
+      "duration_s": 1410.8,
+      "power_w": 774.3
+    },
+    {
+      "job_id": "JOB-0018",
+      "satellite": "SAT-001",
+      "duration_s": 3081.4,
+      "power_w": 610.8
+    },
+    {
+      "job_id": "JOB-0008",
+      "satellite": "SAT-005",
+      "duration_s": 3096.7,
+      "power_w": 258.0
+    },
+    {
+      "job_id": "JOB-0019",
+      "satellite": "SAT-002",
+      "duration_s": 2956.7,
+      "power_w": 693.1
+    },
+    {
+      "job_id": "JOB-0013",
+      "satellite": "SAT-004",
+      "duration_s": 3122.5,
+      "power_w": 791.1
+    }
+  ],
+  "preemption_events": 0
+}

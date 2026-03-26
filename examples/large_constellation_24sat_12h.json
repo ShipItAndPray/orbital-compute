@@ -1,0 +1,1463 @@
+{
+  "config": {
+    "n_satellites": 24,
+    "sim_hours": 12.0,
+    "n_jobs": 200
+  },
+  "scheduler": {
+    "total_jobs": 200,
+    "completed": 200,
+    "running": 0,
+    "queued": 0,
+    "preempted": 0,
+    "idle_steps": 10522,
+    "charge_steps": 0
+  },
+  "fleet_utilization_pct": 38.5,
+  "total_compute_hours": 111.0,
+  "satellite_details": {
+    "SAT-000": {
+      "compute_pct": 38.9,
+      "eclipse_pct": 36.9,
+      "avg_battery_pct": 97.8,
+      "avg_temp_c": -9.2,
+      "max_temp_c": 21.9,
+      "min_battery_pct": 82.5,
+      "contact_windows": 14,
+      "total_contact_minutes": 81.0
+    },
+    "SAT-001": {
+      "compute_pct": 40.3,
+      "eclipse_pct": 39.3,
+      "avg_battery_pct": 97.1,
+      "avg_temp_c": -9.6,
+      "max_temp_c": 21.7,
+      "min_battery_pct": 75.1,
+      "contact_windows": 15,
+      "total_contact_minutes": 93.0
+    },
+    "SAT-002": {
+      "compute_pct": 41.8,
+      "eclipse_pct": 34.4,
+      "avg_battery_pct": 98.0,
+      "avg_temp_c": -8.9,
+      "max_temp_c": 21.7,
+      "min_battery_pct": 79.0,
+      "contact_windows": 16,
+      "total_contact_minutes": 93.0
+    },
+    "SAT-003": {
+      "compute_pct": 43.1,
+      "eclipse_pct": 34.3,
+      "avg_battery_pct": 97.7,
+      "avg_temp_c": -8.0,
+      "max_temp_c": 23.8,
+      "min_battery_pct": 82.0,
+      "contact_windows": 15,
+      "total_contact_minutes": 95.0
+    },
+    "SAT-004": {
+      "compute_pct": 39.9,
+      "eclipse_pct": 34.3,
+      "avg_battery_pct": 97.2,
+      "avg_temp_c": -7.7,
+      "max_temp_c": 22.9,
+      "min_battery_pct": 76.4,
+      "contact_windows": 17,
+      "total_contact_minutes": 98.0
+    },
+    "SAT-005": {
+      "compute_pct": 41.7,
+      "eclipse_pct": 27.4,
+      "avg_battery_pct": 98.7,
+      "avg_temp_c": -8.5,
+      "max_temp_c": 21.2,
+      "min_battery_pct": 80.6,
+      "contact_windows": 17,
+      "total_contact_minutes": 101.0
+    },
+    "SAT-006": {
+      "compute_pct": 38.9,
+      "eclipse_pct": 26.0,
+      "avg_battery_pct": 98.6,
+      "avg_temp_c": -8.9,
+      "max_temp_c": 23.0,
+      "min_battery_pct": 82.2,
+      "contact_windows": 17,
+      "total_contact_minutes": 93.0
+    },
+    "SAT-007": {
+      "compute_pct": 37.4,
+      "eclipse_pct": 28.2,
+      "avg_battery_pct": 98.0,
+      "avg_temp_c": -9.5,
+      "max_temp_c": 21.3,
+      "min_battery_pct": 78.1,
+      "contact_windows": 19,
+      "total_contact_minutes": 107.0
+    },
+    "SAT-008": {
+      "compute_pct": 40.1,
+      "eclipse_pct": 27.6,
+      "avg_battery_pct": 98.8,
+      "avg_temp_c": -8.4,
+      "max_temp_c": 22.9,
+      "min_battery_pct": 82.2,
+      "contact_windows": 19,
+      "total_contact_minutes": 107.0
+    },
+    "SAT-009": {
+      "compute_pct": 36.9,
+      "eclipse_pct": 33.3,
+      "avg_battery_pct": 97.8,
+      "avg_temp_c": -8.6,
+      "max_temp_c": 23.3,
+      "min_battery_pct": 82.1,
+      "contact_windows": 19,
+      "total_contact_minutes": 103.0
+    },
+    "SAT-010": {
+      "compute_pct": 36.0,
+      "eclipse_pct": 36.9,
+      "avg_battery_pct": 96.6,
+      "avg_temp_c": -9.4,
+      "max_temp_c": 21.8,
+      "min_battery_pct": 72.5,
+      "contact_windows": 18,
+      "total_contact_minutes": 104.0
+    },
+    "SAT-011": {
+      "compute_pct": 39.3,
+      "eclipse_pct": 34.2,
+      "avg_battery_pct": 98.3,
+      "avg_temp_c": -10.0,
+      "max_temp_c": 23.3,
+      "min_battery_pct": 81.4,
+      "contact_windows": 17,
+      "total_contact_minutes": 102.0
+    },
+    "SAT-012": {
+      "compute_pct": 41.4,
+      "eclipse_pct": 37.1,
+      "avg_battery_pct": 97.6,
+      "avg_temp_c": -10.6,
+      "max_temp_c": 22.8,
+      "min_battery_pct": 81.7,
+      "contact_windows": 17,
+      "total_contact_minutes": 98.0
+    },
+    "SAT-013": {
+      "compute_pct": 38.3,
+      "eclipse_pct": 39.4,
+      "avg_battery_pct": 96.3,
+      "avg_temp_c": -8.7,
+      "max_temp_c": 22.0,
+      "min_battery_pct": 72.7,
+      "contact_windows": 17,
+      "total_contact_minutes": 87.0
+    },
+    "SAT-014": {
+      "compute_pct": 37.9,
+      "eclipse_pct": 34.6,
+      "avg_battery_pct": 98.2,
+      "avg_temp_c": -9.5,
+      "max_temp_c": 20.7,
+      "min_battery_pct": 79.3,
+      "contact_windows": 13,
+      "total_contact_minutes": 79.0
+    },
+    "SAT-015": {
+      "compute_pct": 39.7,
+      "eclipse_pct": 34.7,
+      "avg_battery_pct": 97.6,
+      "avg_temp_c": -8.1,
+      "max_temp_c": 23.0,
+      "min_battery_pct": 82.2,
+      "contact_windows": 13,
+      "total_contact_minutes": 76.0
+    },
+    "SAT-016": {
+      "compute_pct": 40.7,
+      "eclipse_pct": 35.4,
+      "avg_battery_pct": 97.3,
+      "avg_temp_c": -6.9,
+      "max_temp_c": 22.7,
+      "min_battery_pct": 76.1,
+      "contact_windows": 14,
+      "total_contact_minutes": 86.0
+    },
+    "SAT-017": {
+      "compute_pct": 38.9,
+      "eclipse_pct": 29.2,
+      "avg_battery_pct": 98.6,
+      "avg_temp_c": -7.9,
+      "max_temp_c": 22.0,
+      "min_battery_pct": 80.3,
+      "contact_windows": 15,
+      "total_contact_minutes": 94.0
+    },
+    "SAT-018": {
+      "compute_pct": 41.8,
+      "eclipse_pct": 28.7,
+      "avg_battery_pct": 98.0,
+      "avg_temp_c": -6.4,
+      "max_temp_c": 23.9,
+      "min_battery_pct": 81.9,
+      "contact_windows": 15,
+      "total_contact_minutes": 94.0
+    },
+    "SAT-019": {
+      "compute_pct": 37.4,
+      "eclipse_pct": 31.1,
+      "avg_battery_pct": 96.7,
+      "avg_temp_c": -8.2,
+      "max_temp_c": 23.1,
+      "min_battery_pct": 72.1,
+      "contact_windows": 13,
+      "total_contact_minutes": 84.0
+    },
+    "SAT-020": {
+      "compute_pct": 37.5,
+      "eclipse_pct": 29.0,
+      "avg_battery_pct": 98.7,
+      "avg_temp_c": -7.9,
+      "max_temp_c": 22.2,
+      "min_battery_pct": 82.4,
+      "contact_windows": 13,
+      "total_contact_minutes": 79.0
+    },
+    "SAT-021": {
+      "compute_pct": 35.8,
+      "eclipse_pct": 34.0,
+      "avg_battery_pct": 97.4,
+      "avg_temp_c": -6.9,
+      "max_temp_c": 23.6,
+      "min_battery_pct": 82.0,
+      "contact_windows": 13,
+      "total_contact_minutes": 80.0
+    },
+    "SAT-022": {
+      "compute_pct": 36.7,
+      "eclipse_pct": 37.4,
+      "avg_battery_pct": 97.0,
+      "avg_temp_c": -9.0,
+      "max_temp_c": 20.8,
+      "min_battery_pct": 74.7,
+      "contact_windows": 12,
+      "total_contact_minutes": 74.0
+    },
+    "SAT-023": {
+      "compute_pct": 38.3,
+      "eclipse_pct": 34.4,
+      "avg_battery_pct": 98.3,
+      "avg_temp_c": -9.2,
+      "max_temp_c": 22.4,
+      "min_battery_pct": 80.9,
+      "contact_windows": 14,
+      "total_contact_minutes": 79.0
+    }
+  },
+  "completed_jobs": [
+    {
+      "job_id": "JOB-0045",
+      "satellite": "SAT-002",
+      "duration_s": 323.7,
+      "power_w": 553.1
+    },
+    {
+      "job_id": "JOB-0087",
+      "satellite": "SAT-012",
+      "duration_s": 438.0,
+      "power_w": 457.9
+    },
+    {
+      "job_id": "JOB-0145",
+      "satellite": "SAT-020",
+      "duration_s": 526.4,
+      "power_w": 334.5
+    },
+    {
+      "job_id": "JOB-0034",
+      "satellite": "SAT-001",
+      "duration_s": 833.1,
+      "power_w": 424.3
+    },
+    {
+      "job_id": "JOB-0115",
+      "satellite": "SAT-014",
+      "duration_s": 957.1,
+      "power_w": 334.8
+    },
+    {
+      "job_id": "JOB-0199",
+      "satellite": "SAT-020",
+      "duration_s": 385.4,
+      "power_w": 562.2
+    },
+    {
+      "job_id": "JOB-0058",
+      "satellite": "SAT-004",
+      "duration_s": 1005.4,
+      "power_w": 491.4
+    },
+    {
+      "job_id": "JOB-0118",
+      "satellite": "SAT-015",
+      "duration_s": 1105.1,
+      "power_w": 496.6
+    },
+    {
+      "job_id": "JOB-0136",
+      "satellite": "SAT-017",
+      "duration_s": 1200.7,
+      "power_w": 492.9
+    },
+    {
+      "job_id": "JOB-0062",
+      "satellite": "SAT-005",
+      "duration_s": 1279.1,
+      "power_w": 292.9
+    },
+    {
+      "job_id": "JOB-0109",
+      "satellite": "SAT-013",
+      "duration_s": 1293.1,
+      "power_w": 569.3
+    },
+    {
+      "job_id": "JOB-0030",
+      "satellite": "SAT-000",
+      "duration_s": 1734.7,
+      "power_w": 266.9
+    },
+    {
+      "job_id": "JOB-0015",
+      "satellite": "SAT-020",
+      "duration_s": 991.4,
+      "power_w": 422.1
+    },
+    {
+      "job_id": "JOB-0084",
+      "satellite": "SAT-011",
+      "duration_s": 2120.5,
+      "power_w": 644.7
+    },
+    {
+      "job_id": "JOB-0182",
+      "satellite": "SAT-023",
+      "duration_s": 2204.2,
+      "power_w": 495.0
+    },
+    {
+      "job_id": "JOB-0139",
+      "satellite": "SAT-019",
+      "duration_s": 2253.2,
+      "power_w": 744.2
+    },
+    {
+      "job_id": "JOB-0165",
+      "satellite": "SAT-022",
+      "duration_s": 2267.3,
+      "power_w": 367.8
+    },
+    {
+      "job_id": "JOB-0065",
+      "satellite": "SAT-020",
+      "duration_s": 564.4,
+      "power_w": 776.5
+    },
+    {
+      "job_id": "JOB-0132",
+      "satellite": "SAT-016",
+      "duration_s": 2840.3,
+      "power_w": 433.7
+    },
+    {
+      "job_id": "JOB-0082",
+      "satellite": "SAT-010",
+      "duration_s": 3036.8,
+      "power_w": 580.6
+    },
+    {
+      "job_id": "JOB-0078",
+      "satellite": "SAT-019",
+      "duration_s": 743.2,
+      "power_w": 763.4
+    },
+    {
+      "job_id": "JOB-0064",
+      "satellite": "SAT-006",
+      "duration_s": 3114.0,
+      "power_w": 501.7
+    },
+    {
+      "job_id": "JOB-0055",
+      "satellite": "SAT-003",
+      "duration_s": 3124.7,
+      "power_w": 684.8
+    },
+    {
+      "job_id": "JOB-0067",
+      "satellite": "SAT-007",
+      "duration_s": 3237.9,
+      "power_w": 271.9
+    },
+    {
+      "job_id": "JOB-0138",
+      "satellite": "SAT-018",
+      "duration_s": 3334.5,
+      "power_w": 704.3
+    },
+    {
+      "job_id": "JOB-0071",
+      "satellite": "SAT-008",
+      "duration_s": 3365.8,
+      "power_w": 474.3
+    },
+    {
+      "job_id": "JOB-0081",
+      "satellite": "SAT-022",
+      "duration_s": 1128.7,
+      "power_w": 503.2
+    },
+    {
+      "job_id": "JOB-0146",
+      "satellite": "SAT-021",
+      "duration_s": 3433.7,
+      "power_w": 652.5
+    },
+    {
+      "job_id": "JOB-0194",
+      "satellite": "SAT-012",
+      "duration_s": 3027.9,
+      "power_w": 745.0
+    },
+    {
+      "job_id": "JOB-0001",
+      "satellite": "SAT-001",
+      "duration_s": 2730.4,
+      "power_w": 333.9
+    },
+    {
+      "job_id": "JOB-0076",
+      "satellite": "SAT-009",
+      "duration_s": 3557.9,
+      "power_w": 567.0
+    },
+    {
+      "job_id": "JOB-0088",
+      "satellite": "SAT-020",
+      "duration_s": 993.3,
+      "power_w": 739.4
+    },
+    {
+      "job_id": "JOB-0009",
+      "satellite": "SAT-014",
+      "duration_s": 2708.1,
+      "power_w": 684.3
+    },
+    {
+      "job_id": "JOB-0056",
+      "satellite": "SAT-000",
+      "duration_s": 2083.9,
+      "power_w": 591.3
+    },
+    {
+      "job_id": "JOB-0186",
+      "satellite": "SAT-002",
+      "duration_s": 3567.1,
+      "power_w": 716.1
+    },
+    {
+      "job_id": "JOB-0026",
+      "satellite": "SAT-004",
+      "duration_s": 2913.9,
+      "power_w": 576.5
+    },
+    {
+      "job_id": "JOB-0149",
+      "satellite": "SAT-003",
+      "duration_s": 853.7,
+      "power_w": 660.1
+    },
+    {
+      "job_id": "JOB-0150",
+      "satellite": "SAT-007",
+      "duration_s": 840.4,
+      "power_w": 666.7
+    },
+    {
+      "job_id": "JOB-0025",
+      "satellite": "SAT-014",
+      "duration_s": 455.5,
+      "power_w": 254.5
+    },
+    {
+      "job_id": "JOB-0178",
+      "satellite": "SAT-021",
+      "duration_s": 716.7,
+      "power_w": 618.5
+    },
+    {
+      "job_id": "JOB-0147",
+      "satellite": "SAT-006",
+      "duration_s": 1087.2,
+      "power_w": 572.8
+    },
+    {
+      "job_id": "JOB-0028",
+      "satellite": "SAT-015",
+      "duration_s": 3140.6,
+      "power_w": 782.6
+    },
+    {
+      "job_id": "JOB-0077",
+      "satellite": "SAT-023",
+      "duration_s": 2130.2,
+      "power_w": 600.7
+    },
+    {
+      "job_id": "JOB-0128",
+      "satellite": "SAT-010",
+      "duration_s": 1355.0,
+      "power_w": 363.0
+    },
+    {
+      "job_id": "JOB-0051",
+      "satellite": "SAT-013",
+      "duration_s": 3150.7,
+      "power_w": 446.7
+    },
+    {
+      "job_id": "JOB-0037",
+      "satellite": "SAT-017",
+      "duration_s": 3197.4,
+      "power_w": 234.8
+    },
+    {
+      "job_id": "JOB-0046",
+      "satellite": "SAT-005",
+      "duration_s": 3287.9,
+      "power_w": 337.4
+    },
+    {
+      "job_id": "JOB-0191",
+      "satellite": "SAT-001",
+      "duration_s": 1233.0,
+      "power_w": 372.9
+    },
+    {
+      "job_id": "JOB-0005",
+      "satellite": "SAT-009",
+      "duration_s": 1218.0,
+      "power_w": 469.5
+    },
+    {
+      "job_id": "JOB-0083",
+      "satellite": "SAT-007",
+      "duration_s": 731.7,
+      "power_w": 400.1
+    },
+    {
+      "job_id": "JOB-0099",
+      "satellite": "SAT-023",
+      "duration_s": 680.6,
+      "power_w": 763.5
+    },
+    {
+      "job_id": "JOB-0156",
+      "satellite": "SAT-008",
+      "duration_s": 1686.2,
+      "power_w": 207.6
+    },
+    {
+      "job_id": "JOB-0168",
+      "satellite": "SAT-022",
+      "duration_s": 1919.7,
+      "power_w": 587.5
+    },
+    {
+      "job_id": "JOB-0090",
+      "satellite": "SAT-015",
+      "duration_s": 1081.2,
+      "power_w": 755.5
+    },
+    {
+      "job_id": "JOB-0129",
+      "satellite": "SAT-017",
+      "duration_s": 1063.2,
+      "power_w": 283.0
+    },
+    {
+      "job_id": "JOB-0072",
+      "satellite": "SAT-011",
+      "duration_s": 3594.9,
+      "power_w": 475.0
+    },
+    {
+      "job_id": "JOB-0033",
+      "satellite": "SAT-002",
+      "duration_s": 1975.3,
+      "power_w": 705.0
+    },
+    {
+      "job_id": "JOB-0188",
+      "satellite": "SAT-022",
+      "duration_s": 567.9,
+      "power_w": 358.8
+    },
+    {
+      "job_id": "JOB-0039",
+      "satellite": "SAT-003",
+      "duration_s": 1868.4,
+      "power_w": 277.0
+    },
+    {
+      "job_id": "JOB-0108",
+      "satellite": "SAT-010",
+      "duration_s": 1551.2,
+      "power_w": 599.0
+    },
+    {
+      "job_id": "JOB-0000",
+      "satellite": "SAT-017",
+      "duration_s": 382.5,
+      "power_w": 583.7
+    },
+    {
+      "job_id": "JOB-0014",
+      "satellite": "SAT-020",
+      "duration_s": 2397.8,
+      "power_w": 366.8
+    },
+    {
+      "job_id": "JOB-0173",
+      "satellite": "SAT-023",
+      "duration_s": 935.5,
+      "power_w": 272.4
+    },
+    {
+      "job_id": "JOB-0143",
+      "satellite": "SAT-019",
+      "duration_s": 3045.4,
+      "power_w": 651.2
+    },
+    {
+      "job_id": "JOB-0002",
+      "satellite": "SAT-011",
+      "duration_s": 404.9,
+      "power_w": 554.3
+    },
+    {
+      "job_id": "JOB-0153",
+      "satellite": "SAT-018",
+      "duration_s": 2849.2,
+      "power_w": 261.1
+    },
+    {
+      "job_id": "JOB-0157",
+      "satellite": "SAT-009",
+      "duration_s": 1495.2,
+      "power_w": 460.1
+    },
+    {
+      "job_id": "JOB-0089",
+      "satellite": "SAT-006",
+      "duration_s": 2147.6,
+      "power_w": 412.2
+    },
+    {
+      "job_id": "JOB-0176",
+      "satellite": "SAT-008",
+      "duration_s": 1297.5,
+      "power_w": 416.5
+    },
+    {
+      "job_id": "JOB-0100",
+      "satellite": "SAT-016",
+      "duration_s": 3545.7,
+      "power_w": 548.4
+    },
+    {
+      "job_id": "JOB-0183",
+      "satellite": "SAT-012",
+      "duration_s": 2976.8,
+      "power_w": 291.0
+    },
+    {
+      "job_id": "JOB-0140",
+      "satellite": "SAT-001",
+      "duration_s": 1714.4,
+      "power_w": 250.4
+    },
+    {
+      "job_id": "JOB-0163",
+      "satellite": "SAT-007",
+      "duration_s": 1931.2,
+      "power_w": 401.8
+    },
+    {
+      "job_id": "JOB-0016",
+      "satellite": "SAT-017",
+      "duration_s": 864.8,
+      "power_w": 565.5
+    },
+    {
+      "job_id": "JOB-0038",
+      "satellite": "SAT-004",
+      "duration_s": 2992.9,
+      "power_w": 639.1
+    },
+    {
+      "job_id": "JOB-0031",
+      "satellite": "SAT-000",
+      "duration_s": 3190.3,
+      "power_w": 772.3
+    },
+    {
+      "job_id": "JOB-0137",
+      "satellite": "SAT-005",
+      "duration_s": 2507.3,
+      "power_w": 433.3
+    },
+    {
+      "job_id": "JOB-0086",
+      "satellite": "SAT-021",
+      "duration_s": 3054.2,
+      "power_w": 527.4
+    },
+    {
+      "job_id": "JOB-0079",
+      "satellite": "SAT-001",
+      "duration_s": 813.0,
+      "power_w": 645.5
+    },
+    {
+      "job_id": "JOB-0006",
+      "satellite": "SAT-003",
+      "duration_s": 1422.8,
+      "power_w": 618.9
+    },
+    {
+      "job_id": "JOB-0193",
+      "satellite": "SAT-015",
+      "duration_s": 2097.1,
+      "power_w": 455.1
+    },
+    {
+      "job_id": "JOB-0017",
+      "satellite": "SAT-020",
+      "duration_s": 1552.2,
+      "power_w": 298.0
+    },
+    {
+      "job_id": "JOB-0085",
+      "satellite": "SAT-014",
+      "duration_s": 3418.7,
+      "power_w": 267.1
+    },
+    {
+      "job_id": "JOB-0047",
+      "satellite": "SAT-008",
+      "duration_s": 1219.0,
+      "power_w": 508.5
+    },
+    {
+      "job_id": "JOB-0044",
+      "satellite": "SAT-006",
+      "duration_s": 1415.7,
+      "power_w": 334.8
+    },
+    {
+      "job_id": "JOB-0112",
+      "satellite": "SAT-013",
+      "duration_s": 3467.4,
+      "power_w": 676.2
+    },
+    {
+      "job_id": "JOB-0127",
+      "satellite": "SAT-001",
+      "duration_s": 555.7,
+      "power_w": 364.8
+    },
+    {
+      "job_id": "JOB-0003",
+      "satellite": "SAT-002",
+      "duration_s": 2286.7,
+      "power_w": 339.6
+    },
+    {
+      "job_id": "JOB-0043",
+      "satellite": "SAT-009",
+      "duration_s": 2008.0,
+      "power_w": 462.9
+    },
+    {
+      "job_id": "JOB-0011",
+      "satellite": "SAT-010",
+      "duration_s": 2341.1,
+      "power_w": 697.6
+    },
+    {
+      "job_id": "JOB-0049",
+      "satellite": "SAT-016",
+      "duration_s": 1860.8,
+      "power_w": 345.8
+    },
+    {
+      "job_id": "JOB-0184",
+      "satellite": "SAT-008",
+      "duration_s": 690.9,
+      "power_w": 796.4
+    },
+    {
+      "job_id": "JOB-0092",
+      "satellite": "SAT-007",
+      "duration_s": 1658.7,
+      "power_w": 669.4
+    },
+    {
+      "job_id": "JOB-0004",
+      "satellite": "SAT-022",
+      "duration_s": 2614.4,
+      "power_w": 629.6
+    },
+    {
+      "job_id": "JOB-0172",
+      "satellite": "SAT-020",
+      "duration_s": 1194.0,
+      "power_w": 621.7
+    },
+    {
+      "job_id": "JOB-0095",
+      "satellite": "SAT-004",
+      "duration_s": 1819.0,
+      "power_w": 690.0
+    },
+    {
+      "job_id": "JOB-0012",
+      "satellite": "SAT-010",
+      "duration_s": 451.2,
+      "power_w": 622.7
+    },
+    {
+      "job_id": "JOB-0041",
+      "satellite": "SAT-018",
+      "duration_s": 2792.4,
+      "power_w": 757.3
+    },
+    {
+      "job_id": "JOB-0102",
+      "satellite": "SAT-000",
+      "duration_s": 1987.7,
+      "power_w": 563.7
+    },
+    {
+      "job_id": "JOB-0059",
+      "satellite": "SAT-020",
+      "duration_s": 307.1,
+      "power_w": 298.8
+    },
+    {
+      "job_id": "JOB-0036",
+      "satellite": "SAT-019",
+      "duration_s": 3044.5,
+      "power_w": 727.2
+    },
+    {
+      "job_id": "JOB-0018",
+      "satellite": "SAT-023",
+      "duration_s": 3081.4,
+      "power_w": 610.8
+    },
+    {
+      "job_id": "JOB-0022",
+      "satellite": "SAT-008",
+      "duration_s": 760.8,
+      "power_w": 285.7
+    },
+    {
+      "job_id": "JOB-0032",
+      "satellite": "SAT-022",
+      "duration_s": 651.2,
+      "power_w": 504.6
+    },
+    {
+      "job_id": "JOB-0052",
+      "satellite": "SAT-012",
+      "duration_s": 2703.1,
+      "power_w": 236.4
+    },
+    {
+      "job_id": "JOB-0126",
+      "satellite": "SAT-021",
+      "duration_s": 2020.3,
+      "power_w": 659.5
+    },
+    {
+      "job_id": "JOB-0040",
+      "satellite": "SAT-011",
+      "duration_s": 3179.0,
+      "power_w": 359.0
+    },
+    {
+      "job_id": "JOB-0103",
+      "satellite": "SAT-005",
+      "duration_s": 2639.0,
+      "power_w": 352.8
+    },
+    {
+      "job_id": "JOB-0190",
+      "satellite": "SAT-013",
+      "duration_s": 1850.7,
+      "power_w": 613.6
+    },
+    {
+      "job_id": "JOB-0010",
+      "satellite": "SAT-009",
+      "duration_s": 1549.2,
+      "power_w": 783.9
+    },
+    {
+      "job_id": "JOB-0094",
+      "satellite": "SAT-017",
+      "duration_s": 3133.4,
+      "power_w": 723.3
+    },
+    {
+      "job_id": "JOB-0080",
+      "satellite": "SAT-000",
+      "duration_s": 971.9,
+      "power_w": 630.6
+    },
+    {
+      "job_id": "JOB-0135",
+      "satellite": "SAT-003",
+      "duration_s": 2724.3,
+      "power_w": 522.9
+    },
+    {
+      "job_id": "JOB-0152",
+      "satellite": "SAT-015",
+      "duration_s": 2659.5,
+      "power_w": 438.0
+    },
+    {
+      "job_id": "JOB-0148",
+      "satellite": "SAT-022",
+      "duration_s": 1019.3,
+      "power_w": 538.4
+    },
+    {
+      "job_id": "JOB-0070",
+      "satellite": "SAT-004",
+      "duration_s": 1606.1,
+      "power_w": 343.2
+    },
+    {
+      "job_id": "JOB-0187",
+      "satellite": "SAT-006",
+      "duration_s": 2742.3,
+      "power_w": 565.8
+    },
+    {
+      "job_id": "JOB-0175",
+      "satellite": "SAT-014",
+      "duration_s": 3047.7,
+      "power_w": 788.3
+    },
+    {
+      "job_id": "JOB-0027",
+      "satellite": "SAT-007",
+      "duration_s": 2266.4,
+      "power_w": 430.9
+    },
+    {
+      "job_id": "JOB-0180",
+      "satellite": "SAT-009",
+      "duration_s": 908.4,
+      "power_w": 464.3
+    },
+    {
+      "job_id": "JOB-0169",
+      "satellite": "SAT-011",
+      "duration_s": 1634.5,
+      "power_w": 376.5
+    },
+    {
+      "job_id": "JOB-0091",
+      "satellite": "SAT-009",
+      "duration_s": 381.8,
+      "power_w": 728.8
+    },
+    {
+      "job_id": "JOB-0192",
+      "satellite": "SAT-001",
+      "duration_s": 3348.9,
+      "power_w": 612.4
+    },
+    {
+      "job_id": "JOB-0008",
+      "satellite": "SAT-002",
+      "duration_s": 3096.7,
+      "power_w": 258.0
+    },
+    {
+      "job_id": "JOB-0019",
+      "satellite": "SAT-016",
+      "duration_s": 2956.7,
+      "power_w": 693.1
+    },
+    {
+      "job_id": "JOB-0195",
+      "satellite": "SAT-000",
+      "duration_s": 1315.1,
+      "power_w": 299.6
+    },
+    {
+      "job_id": "JOB-0185",
+      "satellite": "SAT-017",
+      "duration_s": 1555.2,
+      "power_w": 665.4
+    },
+    {
+      "job_id": "JOB-0105",
+      "satellite": "SAT-020",
+      "duration_s": 2489.2,
+      "power_w": 573.9
+    },
+    {
+      "job_id": "JOB-0069",
+      "satellite": "SAT-014",
+      "duration_s": 974.1,
+      "power_w": 760.8
+    },
+    {
+      "job_id": "JOB-0097",
+      "satellite": "SAT-009",
+      "duration_s": 529.1,
+      "power_w": 367.2
+    },
+    {
+      "job_id": "JOB-0104",
+      "satellite": "SAT-002",
+      "duration_s": 530.9,
+      "power_w": 418.5
+    },
+    {
+      "job_id": "JOB-0125",
+      "satellite": "SAT-023",
+      "duration_s": 2780.9,
+      "power_w": 470.0
+    },
+    {
+      "job_id": "JOB-0042",
+      "satellite": "SAT-004",
+      "duration_s": 1616.7,
+      "power_w": 627.8
+    },
+    {
+      "job_id": "JOB-0142",
+      "satellite": "SAT-008",
+      "duration_s": 2812.1,
+      "power_w": 396.1
+    },
+    {
+      "job_id": "JOB-0158",
+      "satellite": "SAT-012",
+      "duration_s": 2721.5,
+      "power_w": 461.3
+    },
+    {
+      "job_id": "JOB-0074",
+      "satellite": "SAT-010",
+      "duration_s": 3201.6,
+      "power_w": 728.5
+    },
+    {
+      "job_id": "JOB-0075",
+      "satellite": "SAT-018",
+      "duration_s": 3051.4,
+      "power_w": 294.6
+    },
+    {
+      "job_id": "JOB-0130",
+      "satellite": "SAT-020",
+      "duration_s": 512.0,
+      "power_w": 623.9
+    },
+    {
+      "job_id": "JOB-0035",
+      "satellite": "SAT-022",
+      "duration_s": 1912.4,
+      "power_w": 559.4
+    },
+    {
+      "job_id": "JOB-0068",
+      "satellite": "SAT-006",
+      "duration_s": 1683.4,
+      "power_w": 571.6
+    },
+    {
+      "job_id": "JOB-0029",
+      "satellite": "SAT-015",
+      "duration_s": 2072.0,
+      "power_w": 609.0
+    },
+    {
+      "job_id": "JOB-0161",
+      "satellite": "SAT-021",
+      "duration_s": 3041.4,
+      "power_w": 711.0
+    },
+    {
+      "job_id": "JOB-0110",
+      "satellite": "SAT-016",
+      "duration_s": 993.6,
+      "power_w": 382.3
+    },
+    {
+      "job_id": "JOB-0174",
+      "satellite": "SAT-005",
+      "duration_s": 2737.4,
+      "power_w": 314.9
+    },
+    {
+      "job_id": "JOB-0198",
+      "satellite": "SAT-010",
+      "duration_s": 431.5,
+      "power_w": 248.3
+    },
+    {
+      "job_id": "JOB-0114",
+      "satellite": "SAT-019",
+      "duration_s": 3441.6,
+      "power_w": 256.0
+    },
+    {
+      "job_id": "JOB-0113",
+      "satellite": "SAT-000",
+      "duration_s": 1236.5,
+      "power_w": 595.3
+    },
+    {
+      "job_id": "JOB-0073",
+      "satellite": "SAT-007",
+      "duration_s": 1969.4,
+      "power_w": 522.6
+    },
+    {
+      "job_id": "JOB-0098",
+      "satellite": "SAT-001",
+      "duration_s": 1618.9,
+      "power_w": 584.9
+    },
+    {
+      "job_id": "JOB-0177",
+      "satellite": "SAT-013",
+      "duration_s": 3515.2,
+      "power_w": 364.6
+    },
+    {
+      "job_id": "JOB-0122",
+      "satellite": "SAT-017",
+      "duration_s": 1833.3,
+      "power_w": 280.0
+    },
+    {
+      "job_id": "JOB-0020",
+      "satellite": "SAT-003",
+      "duration_s": 3313.3,
+      "power_w": 239.7
+    },
+    {
+      "job_id": "JOB-0164",
+      "satellite": "SAT-004",
+      "duration_s": 1470.9,
+      "power_w": 492.5
+    },
+    {
+      "job_id": "JOB-0096",
+      "satellite": "SAT-011",
+      "duration_s": 2478.1,
+      "power_w": 333.8
+    },
+    {
+      "job_id": "JOB-0007",
+      "satellite": "SAT-018",
+      "duration_s": 1410.8,
+      "power_w": 774.3
+    },
+    {
+      "job_id": "JOB-0170",
+      "satellite": "SAT-008",
+      "duration_s": 1517.8,
+      "power_w": 598.4
+    },
+    {
+      "job_id": "JOB-0023",
+      "satellite": "SAT-022",
+      "duration_s": 1713.8,
+      "power_w": 648.2
+    },
+    {
+      "job_id": "JOB-0154",
+      "satellite": "SAT-009",
+      "duration_s": 2167.6,
+      "power_w": 677.7
+    },
+    {
+      "job_id": "JOB-0101",
+      "satellite": "SAT-019",
+      "duration_s": 1440.8,
+      "power_w": 557.9
+    },
+    {
+      "job_id": "JOB-0155",
+      "satellite": "SAT-002",
+      "duration_s": 2483.0,
+      "power_w": 519.6
+    },
+    {
+      "job_id": "JOB-0053",
+      "satellite": "SAT-015",
+      "duration_s": 2069.7,
+      "power_w": 315.0
+    },
+    {
+      "job_id": "JOB-0144",
+      "satellite": "SAT-014",
+      "duration_s": 2771.8,
+      "power_w": 482.2
+    },
+    {
+      "job_id": "JOB-0166",
+      "satellite": "SAT-008",
+      "duration_s": 930.5,
+      "power_w": 510.0
+    },
+    {
+      "job_id": "JOB-0162",
+      "satellite": "SAT-018",
+      "duration_s": 1104.7,
+      "power_w": 729.0
+    },
+    {
+      "job_id": "JOB-0160",
+      "satellite": "SAT-023",
+      "duration_s": 2712.4,
+      "power_w": 461.3
+    },
+    {
+      "job_id": "JOB-0050",
+      "satellite": "SAT-006",
+      "duration_s": 2474.6,
+      "power_w": 256.6
+    },
+    {
+      "job_id": "JOB-0171",
+      "satellite": "SAT-012",
+      "duration_s": 2761.6,
+      "power_w": 455.3
+    },
+    {
+      "job_id": "JOB-0107",
+      "satellite": "SAT-007",
+      "duration_s": 2129.6,
+      "power_w": 618.3
+    },
+    {
+      "job_id": "JOB-0134",
+      "satellite": "SAT-004",
+      "duration_s": 1460.8,
+      "power_w": 203.5
+    },
+    {
+      "job_id": "JOB-0066",
+      "satellite": "SAT-005",
+      "duration_s": 2528.2,
+      "power_w": 557.0
+    },
+    {
+      "job_id": "JOB-0106",
+      "satellite": "SAT-000",
+      "duration_s": 2500.7,
+      "power_w": 504.3
+    },
+    {
+      "job_id": "JOB-0131",
+      "satellite": "SAT-003",
+      "duration_s": 1672.1,
+      "power_w": 525.6
+    },
+    {
+      "job_id": "JOB-0063",
+      "satellite": "SAT-018",
+      "duration_s": 488.6,
+      "power_w": 648.8
+    },
+    {
+      "job_id": "JOB-0060",
+      "satellite": "SAT-016",
+      "duration_s": 2890.9,
+      "power_w": 755.9
+    },
+    {
+      "job_id": "JOB-0013",
+      "satellite": "SAT-020",
+      "duration_s": 3122.5,
+      "power_w": 791.1
+    },
+    {
+      "job_id": "JOB-0117",
+      "satellite": "SAT-001",
+      "duration_s": 2378.2,
+      "power_w": 448.7
+    },
+    {
+      "job_id": "JOB-0057",
+      "satellite": "SAT-021",
+      "duration_s": 3100.7,
+      "power_w": 755.8
+    },
+    {
+      "job_id": "JOB-0093",
+      "satellite": "SAT-010",
+      "duration_s": 2898.3,
+      "power_w": 360.1
+    },
+    {
+      "job_id": "JOB-0181",
+      "satellite": "SAT-022",
+      "duration_s": 1876.5,
+      "power_w": 764.6
+    },
+    {
+      "job_id": "JOB-0196",
+      "satellite": "SAT-009",
+      "duration_s": 1846.7,
+      "power_w": 463.5
+    },
+    {
+      "job_id": "JOB-0121",
+      "satellite": "SAT-007",
+      "duration_s": 1122.4,
+      "power_w": 230.1
+    },
+    {
+      "job_id": "JOB-0021",
+      "satellite": "SAT-019",
+      "duration_s": 1947.5,
+      "power_w": 327.6
+    },
+    {
+      "job_id": "JOB-0189",
+      "satellite": "SAT-020",
+      "duration_s": 816.6,
+      "power_w": 531.2
+    },
+    {
+      "job_id": "JOB-0054",
+      "satellite": "SAT-014",
+      "duration_s": 1826.7,
+      "power_w": 310.1
+    },
+    {
+      "job_id": "JOB-0119",
+      "satellite": "SAT-013",
+      "duration_s": 3139.5,
+      "power_w": 735.6
+    },
+    {
+      "job_id": "JOB-0111",
+      "satellite": "SAT-023",
+      "duration_s": 1759.1,
+      "power_w": 479.0
+    },
+    {
+      "job_id": "JOB-0141",
+      "satellite": "SAT-000",
+      "duration_s": 1551.0,
+      "power_w": 230.2
+    },
+    {
+      "job_id": "JOB-0116",
+      "satellite": "SAT-006",
+      "duration_s": 1867.9,
+      "power_w": 346.9
+    },
+    {
+      "job_id": "JOB-0123",
+      "satellite": "SAT-017",
+      "duration_s": 3241.7,
+      "power_w": 770.0
+    },
+    {
+      "job_id": "JOB-0151",
+      "satellite": "SAT-011",
+      "duration_s": 3365.3,
+      "power_w": 547.2
+    },
+    {
+      "job_id": "JOB-0048",
+      "satellite": "SAT-015",
+      "duration_s": 2687.1,
+      "power_w": 523.5
+    },
+    {
+      "job_id": "JOB-0124",
+      "satellite": "SAT-004",
+      "duration_s": 2108.0,
+      "power_w": 698.3
+    },
+    {
+      "job_id": "JOB-0061",
+      "satellite": "SAT-008",
+      "duration_s": 2710.7,
+      "power_w": 618.0
+    },
+    {
+      "job_id": "JOB-0197",
+      "satellite": "SAT-001",
+      "duration_s": 1951.6,
+      "power_w": 765.6
+    },
+    {
+      "job_id": "JOB-0179",
+      "satellite": "SAT-016",
+      "duration_s": 2194.4,
+      "power_w": 723.6
+    },
+    {
+      "job_id": "JOB-0120",
+      "satellite": "SAT-012",
+      "duration_s": 2953.6,
+      "power_w": 331.3
+    },
+    {
+      "job_id": "JOB-0133",
+      "satellite": "SAT-005",
+      "duration_s": 2826.5,
+      "power_w": 714.0
+    },
+    {
+      "job_id": "JOB-0024",
+      "satellite": "SAT-002",
+      "duration_s": 3591.2,
+      "power_w": 417.2
+    },
+    {
+      "job_id": "JOB-0167",
+      "satellite": "SAT-018",
+      "duration_s": 2801.9,
+      "power_w": 493.1
+    },
+    {
+      "job_id": "JOB-0159",
+      "satellite": "SAT-003",
+      "duration_s": 3334.7,
+      "power_w": 569.5
+    }
+  ],
+  "preemption_events": 0
+}
