@@ -23,6 +23,17 @@ This is the only open-source tool that models the **complete space datacenter st
 
 No hype. No hand-waving. No "trust us." Run the simulation yourself.
 
+## Who Is This For?
+
+| You are... | You need... | Start here |
+|-----------|------------|------------|
+| **Startup founder** pitching orbital compute to VCs | "Is this economically viable?" | `python -m orbital_compute.cost_model` (30 sec) |
+| **Grad student** writing an OEC thesis | A baseline simulator to compare your algorithm against | `pip install -r requirements.txt && python benchmark.py` |
+| **Engineer** at Starcloud/Axiom/Kepler | "Will PHOENIX scheduling help our battery life?" | `python -m orbital_compute.phoenix` |
+| **Mission planner** sizing a constellation | "How many sats do I need for 1000 GPU-hours/day?" | `python -m orbital_compute.designer` |
+| **Journalist** writing about space datacenters | "Is orbital compute actually viable?" | [Data Pipeline Visualization](https://shipitandpray.github.io/orbital-compute/pipeline.html) |
+| **Conference reviewer** checking an OEC paper | "Are these numbers realistic?" | [REPRODUCIBILITY.md](REPRODUCIBILITY.md) |
+
 ```bash
 pip install -r requirements.txt
 python demo.py
