@@ -230,3 +230,34 @@ class OrbitalScheduler:
             "idle_steps": sum(1 for d in self.schedule_log if d.action == "idle"),
             "charge_steps": sum(1 for d in self.schedule_log if d.action == "charge"),
         }
+
+
+if __name__ == "__main__":
+    from datetime import datetime, timezone
+    print("=" * 60)
+    print("  JOB SCHEDULER DEMO (v1 Greedy)")
+    print("=" * 60)
+    sched = OrbitalScheduler()
+    jobs = [ComputeJob(f"J{i}", f"batch-{i}", power_watts=200+i*50,
+                        duration_seconds=120+i*60, priority=i%5+1)
+            for i in range(8)]
+    sched.submit_jobs(jobs)
+    t = datetime(2026, 3, 26, 12, 0, 0, tzinfo=timezone.utc)
+    print(f"\n  {len(jobs)} jobs submitted, simulating 2 satellites...")
+    from datetime import timedelta
+    for step in range(30):
+        ts = t + timedelta(minutes=step)
+        eclipse = 10 <= step <= 20
+        for sat in ["SAT-A", "SAT-B"]:
+            batt = 0.4 if eclipse else 0.9
+            d = sched.decide(sat, ts, power_available_w=1200,
+                              battery_pct=batt, thermal_can_compute=True,
+                              thermal_throttle=0.0, in_eclipse=eclipse)
+            if d.action == "run" and d.job:
+                sched.advance_job(sat, 60, 0.0, ts)
+    s = sched.stats()
+    print(f"  Completed: {s['completed']}/{s['total_jobs']}")
+    print(f"  Preempted: {s['preempted']}")
+    print(f"  Idle steps: {s['idle_steps']}")
+    print(f"  Charge steps: {s['charge_steps']}")
+    print(f"\n{'=' * 60}")
