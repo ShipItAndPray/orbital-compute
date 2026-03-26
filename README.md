@@ -184,6 +184,10 @@ orbital_compute/          # 26 Python modules
 ├── constellations.py     # Pre-defined configs + real TLE fetch
 ├── formats.py            # CCSDS OEM, STK ephemeris, JSON Schema
 ├── standards.py          # ECSS power/thermal/link budgets
+├── debris.py             # Collision probability, CAM planning, Kessler risk
+├── propulsion.py         # Atmospheric drag, station-keeping, deorbit planning
+├── federated.py          # Federated learning across constellation (FedAvg/FedProx)
+├── k8s_scheduler.py      # Kubernetes scheduler extender for orbit-aware pods
 ├── api.py                # REST API
 ├── simulator.py          # Core simulation engine
 ├── visualize.py          # 3D Three.js globe generator
